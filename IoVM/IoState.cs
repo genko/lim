@@ -282,27 +282,28 @@ namespace io {
 
         public IoObject processBootstrap()
         {
-            string[] ios = null;
-            try
-            {
-                ios = Directory.GetFiles("../io/bootstrap");
-            }
-            catch {
-            }
-            if (ios == null || ios.Length == 0)
-            {
-                Console.WriteLine("Bootstrap not found. Processing raw Io.");
-                return null;
-            }
-            else
-                Console.WriteLine("Bootstrap successfully loaded.");
-            ArrayList iosa = new ArrayList(ios);
-            iosa.Sort();
+            //string[] ios = null;
+            //try
+            //{
+            //    ios = Directory.GetFiles("../io/bootstrap");
+            // }
+            //catch {
+            //}
+            //if (ios == null || ios.Length == 0)
+            //{
+            //    Console.WriteLine("Bootstrap not found. Processing raw Io.");
+            //    return null;
+            //}
+            //else
+            //    Console.WriteLine("Bootstrap successfully loaded.");
+            //ArrayList iosa = new ArrayList(ios);
+            //iosa.Sort();
             IoObject result = null;
-            foreach (string s in iosa)
-            {
-                result = loadFile(s);
-            }
+            result = onDoCStringWithLabel(lobby, IoBootstrap.bootstrap, "bootstrap");
+            //foreach (string s in iosa)
+            //{
+            //    result = loadFile(s);
+            //}
             return result;
         }
 
