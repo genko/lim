@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IoBlock.cs" />
+    <Compile Include="IoBootstrap.cs" />
     <Compile Include="IoCall.cs" />
     <Compile Include="IoCFunction.cs" />
     <Compile Include="IoCLR.cs" />
