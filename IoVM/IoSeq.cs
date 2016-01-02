@@ -61,7 +61,8 @@ namespace io
                 new IoCFunction("appendSeq", new IoMethodFunc(IoSeq.slotAppendSeq)),
                 new IoCFunction("at", new IoMethodFunc(IoSeq.slotAt)),
                 new IoCFunction("reverse", new IoMethodFunc(IoSeq.slotReverse)),
-			};
+                new IoCFunction("size", new IoMethodFunc(IoSeq.size)),
+            };
 
 			pro.addTaglessMethodTable(state, methodTable);
 			return pro;
@@ -97,7 +98,15 @@ namespace io
             return res;
         }
 
-		public override IoObject clone(IoState state)
+        public static IoObject size(IoObject target, IoObject locals, IoObject message)
+        {
+            IoMessage m = message as IoMessage;
+            IoSeq o = target as IoSeq;
+            return IoNumber.newWithDouble(target.state, o.value.Length);
+        }
+
+
+        public override IoObject clone(IoState state)
 		{
 			IoSeq proto = state.protoWithInitFunc(name) as IoSeq;
 			IoSeq result = new IoSeq();
