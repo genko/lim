@@ -4,30 +4,30 @@ using System.Text;
 using System.Reflection;
 using System.Collections;
 
-namespace io
+namespace lim
 {
-    public class IoCLRAssembly : IoObject
+    public class LimClrAssembly : LimObject
     {
         public override string name { get { return "CLRAssembly"; } }
         public Assembly assembly;
         public string assemblyName;
         public Type[] assemblyTypes;
         public Hashtable assemblyNamespaces;
-        public IoCLRAssembly() : base() { isActivatable = false; }
+        public LimClrAssembly() : base() { isActivatable = false; }
 
-        public new static IoCLRAssembly createProto(IoState state)
+        public new static LimClrAssembly createProto(LimState state)
         {
-            IoCLRAssembly cf = new IoCLRAssembly();
-            return cf.proto(state) as IoCLRAssembly;
+            LimClrAssembly cf = new LimClrAssembly();
+            return cf.proto(state) as LimClrAssembly;
         }
 
-        public new static IoCLRAssembly createObject(IoState state)
+        public new static LimClrAssembly createObject(LimState state)
         {
-            IoCLRAssembly cf = new IoCLRAssembly();
-            return cf.proto(state).clone(state) as IoCLRAssembly;
+            LimClrAssembly cf = new LimClrAssembly();
+            return cf.proto(state).clone(state) as LimClrAssembly;
         }
 
-        public IoCLRAssembly(IoState state, string name)
+        public LimClrAssembly(LimState state, string name)
         {
             isActivatable = true;
             this.state = state;
@@ -36,19 +36,19 @@ namespace io
             uniqueId = 0;
         }
 
-        public override IoObject proto(IoState state)
+        public override LimObject proto(LimState state)
         {
-            IoCLRAssembly pro = new IoCLRAssembly();
+            LimClrAssembly pro = new LimClrAssembly();
             pro.state = state;
             pro.uniqueId = 0;
             pro.createSlots();
             pro.createProtos();
             pro.isActivatable = true;
-            state.registerProtoWithFunc(pro.name, new IoStateProto(pro.name, pro, new IoStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(pro.name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
             //pro.protos.Add(state.protoWithInitFunc("Object"));
 
-            IoCFunction[] methodTable = new IoCFunction[] {
-			    new IoCFunction("namespaces", new IoMethodFunc(IoCLRAssembly.slotNamespaces)),
+            LimCFunction[] methodTable = new LimCFunction[] {
+			    new LimCFunction("namespaces", new LimMethodFunc(LimClrAssembly.slotNamespaces)),
             };
 
             pro.addTaglessMethodTable(state, methodTable);
@@ -57,10 +57,10 @@ namespace io
 
         // published slots
 
-        public static IoObject slotNamespaces(IoObject target, IoObject locals, IoObject message)
+        public static LimObject slotNamespaces(LimObject target, LimObject locals, LimObject message)
         {
-            IoCLRAssembly self = target as IoCLRAssembly;
-            IoMessage m = message as IoMessage;
+            LimClrAssembly self = target as LimClrAssembly;
+            LimMessage m = message as LimMessage;
             foreach (string s in self.assemblyNamespaces.Keys)
             {
                 Console.Write(s + " ");

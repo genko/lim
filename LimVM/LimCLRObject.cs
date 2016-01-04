@@ -4,28 +4,28 @@ using System.Text;
 using System.Reflection;
 using System.Collections;
 
-namespace io
+namespace lim
 {
-    public class IoCLRObject : IoObject
+    public class LimClrObject : LimObject
     {
         public override string name { get { return "CLRObject"; } }
         public Type clrType;
         public object clrInstance;
-        public IoCLRObject() : base() { isActivatable = false; }
+        public LimClrObject() : base() { isActivatable = false; }
 
-        public new static IoCLRObject createProto(IoState state)
+        public new static LimClrObject createProto(LimState state)
         {
-            IoCLRObject cf = new IoCLRObject();
-            return cf.proto(state) as IoCLRObject;
+            LimClrObject cf = new LimClrObject();
+            return cf.proto(state) as LimClrObject;
         }
 
-        public new static IoCLRObject createObject(IoState state)
+        public new static LimClrObject createObject(LimState state)
         {
-            IoCLRObject cf = new IoCLRObject();
-            return cf.proto(state).clone(state) as IoCLRObject;
+            LimClrObject cf = new LimClrObject();
+            return cf.proto(state).clone(state) as LimClrObject;
         }
 
-        public IoCLRObject(IoState state, string name)
+        public LimClrObject(LimState state, string name)
         {
             isActivatable = true;
             this.state = state;
@@ -34,29 +34,29 @@ namespace io
             uniqueId = 0;
         }
 
-        public override IoObject proto(IoState state)
+        public override LimObject proto(LimState state)
         {
-            IoCLRObject pro = new IoCLRObject();
+            LimClrObject pro = new LimClrObject();
             pro.state = state;
             pro.uniqueId = 0;
             pro.createSlots();
             pro.createProtos();
             pro.isActivatable = true;
-            state.registerProtoWithFunc(pro.name, new IoStateProto(pro.name, pro, new IoStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(pro.name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
 			pro.protos.Add(state.protoWithInitFunc("Object"));
 
-            IoCFunction[] methodTable = new IoCFunction[] {
-				new IoCFunction("type", new IoMethodFunc(IoObject.slotType))
+            LimCFunction[] methodTable = new LimCFunction[] {
+				new LimCFunction("type", new LimMethodFunc(LimObject.slotType))
 			};
 
             pro.addTaglessMethodTable(state, methodTable);
             return pro;
         }
 
-        public override IoObject clone(IoState state)
+        public override LimObject clone(LimState state)
         {
-            IoCLRObject proto = state.protoWithInitFunc(name) as IoCLRObject;
-            IoCLRObject result = new IoCLRObject();
+            LimClrObject proto = state.protoWithInitFunc(name) as LimClrObject;
+            LimClrObject result = new LimClrObject();
             result.isActivatable = true;
             uniqueIdCounter++;
             result.uniqueId = uniqueIdCounter;
@@ -67,7 +67,7 @@ namespace io
             return result;
         }
 
-        public IoCLRFunction getMethod(IoMessage message)
+        public LimClrFunction getMethod(LimMessage message)
         {
             string methodName = message.messageName.value;
             if (clrType == null) return null;
@@ -81,14 +81,14 @@ namespace io
 
             for (int i = 0; i < message.args.Count; i++)
             {
-                IoObject o = message.localsValueArgAt(message, i);
+                LimObject o = message.localsValueArgAt(message, i);
                 args.Add(o);
                 Type t = null;
                 switch (o.name)
                 {
                     case "Number": t = typeof(double); break;
                     case "Object": t = typeof(object); break;
-                    case "CLRObject": t = (o as IoCLRObject).clrType; break;
+                    case "CLRObject": t = (o as LimClrObject).clrType; break;
                     case "Sequence": t = typeof(string); break;
                 }
                 parameters[i] = t;
@@ -109,14 +109,14 @@ namespace io
                 catch { }
             }
             
-            IoCLRFunction clrFunction = IoCLRFunction.createObject(this.state);
+            LimClrFunction clrFunction = LimClrFunction.createObject(this.state);
             clrFunction.methodInfo = mb;
             clrFunction.parametersTypes = parameters;
             clrFunction.evaluatedParameters = args;
             return clrFunction;
         }
 
-        public override IoObject activate(IoObject self, IoObject target, IoObject locals, IoMessage m, IoObject slotContext)
+        public override LimObject activate(LimObject self, LimObject target, LimObject locals, LimMessage m, LimObject slotContext)
         {
             return self;
         }

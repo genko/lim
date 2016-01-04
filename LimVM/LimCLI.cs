@@ -6,13 +6,13 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Reflection.Emit;
 
-namespace io
+namespace lim
 {
-	public class IoCLI {
+	public class LimCLI {
 
         static void Main()
         {
-            IoState state = new IoState();
+            LimState state = new LimState();
             state.prompt(state);
 
         }

@@ -2,114 +2,114 @@ using System;
 using System.Text;
 using System.Diagnostics;
 
-namespace io
+namespace lim
 {
-    public class IoSeq : IoObject
+    public class LimSeq : LimObject
     {
         public override string name { get { return "Sequence"; } }
         public string value = String.Empty;
 
         public char[] asCharArray { get { return value.ToCharArray(); } }
 
-		public new static IoSeq createProto(IoState state)
+		public new static LimSeq createProto(LimState state)
 		{
-			IoSeq s = new IoSeq();
-			return s.proto(state) as IoSeq;
+			LimSeq s = new LimSeq();
+			return s.proto(state) as LimSeq;
 		}
 
-        public new static IoSeq createObject(IoState state)
+        public new static LimSeq createObject(LimState state)
         {
-            IoSeq s = new IoSeq();
-            return s.clone(state) as IoSeq;
+            LimSeq s = new LimSeq();
+            return s.clone(state) as LimSeq;
         }
 
-        public static IoSeq createObject(IoSeq symbol)
+        public static LimSeq createObject(LimSeq symbol)
         {
-            IoSeq seq = new IoSeq();
-            seq = seq.clone(symbol.state) as IoSeq;
+            LimSeq seq = new LimSeq();
+            seq = seq.clone(symbol.state) as LimSeq;
             seq.value = symbol.value;
             return seq;
         }
 
-        public static IoSeq createObject(IoState state, string symbol)
+        public static LimSeq createObject(LimState state, string symbol)
         {
-            IoSeq seq = new IoSeq();
-            seq = seq.clone(state) as IoSeq;
+            LimSeq seq = new LimSeq();
+            seq = seq.clone(state) as LimSeq;
             seq.value = symbol;
             return seq;
         }
 
-        public static IoSeq createSymbolInMachine(IoState state, string symbol)
+        public static LimSeq createSymbolInMachine(LimState state, string symbol)
         {
             if (state.symbols[symbol] == null)
-                state.symbols[symbol] = IoSeq.createObject(state, symbol);
-            return state.symbols[symbol] as IoSeq;
+                state.symbols[symbol] = LimSeq.createObject(state, symbol);
+            return state.symbols[symbol] as LimSeq;
         }
 
-        public override IoObject proto(IoState state)
+        public override LimObject proto(LimState state)
 		{
-			IoSeq pro = new IoSeq();
+			LimSeq pro = new LimSeq();
             pro.state = state;
 		//	pro.tag.cloneFunc = new IoTagCloneFunc(this.clone);
         //    pro.tag.compareFunc = new IoTagCompareFunc(this.compare);
             pro.createSlots();
             pro.createProtos();
-            state.registerProtoWithFunc(name, new IoStateProto(name, pro, new IoStateProtoFunc(this.proto)));
+            state.registerProtoWithFunc(name, new LimStateProto(name, pro, new LimStateProtoFunc(this.proto)));
 			pro.protos.Add(state.protoWithInitFunc("Object"));
 
-            IoCFunction[] methodTable = new IoCFunction[] {
-                new IoCFunction("appendSeq", new IoMethodFunc(IoSeq.slotAppendSeq)),
-                new IoCFunction("at", new IoMethodFunc(IoSeq.slotAt)),
-                new IoCFunction("reverse", new IoMethodFunc(IoSeq.slotReverse)),
-                new IoCFunction("size", new IoMethodFunc(IoSeq.size)),
+            LimCFunction[] methodTable = new LimCFunction[] {
+                new LimCFunction("appendSeq", new LimMethodFunc(LimSeq.slotAppendSeq)),
+                new LimCFunction("at", new LimMethodFunc(LimSeq.slotAt)),
+                new LimCFunction("reverse", new LimMethodFunc(LimSeq.slotReverse)),
+                new LimCFunction("size", new LimMethodFunc(LimSeq.size)),
             };
 
 			pro.addTaglessMethodTable(state, methodTable);
 			return pro;
 		}
 
-        public static IoObject slotAppendSeq(IoObject target, IoObject locals, IoObject message)
+        public static LimObject slotAppendSeq(LimObject target, LimObject locals, LimObject message)
         {
-            IoMessage m = message as IoMessage;
-            IoSeq o = target as IoSeq;
-            IoSeq arg = m.localsSymbolArgAt(locals, 0);
+            LimMessage m = message as LimMessage;
+            LimSeq o = target as LimSeq;
+            LimSeq arg = m.localsSymbolArgAt(locals, 0);
             o.value += arg.value.Replace(@"\""", "\"");
             return o;
         }
 
-        public static IoObject slotAt(IoObject target, IoObject locals, IoObject message)
+        public static LimObject slotAt(LimObject target, LimObject locals, LimObject message)
         {
-            IoMessage m = message as IoMessage;
-            IoSeq o = target as IoSeq;
-            IoSeq res = IoSeq.createObject(target.state);
-            IoNumber arg = m.localsNumberArgAt(locals, 0);
+            LimMessage m = message as LimMessage;
+            LimSeq o = target as LimSeq;
+            LimSeq res = LimSeq.createObject(target.state);
+            LimNumber arg = m.localsNumberArgAt(locals, 0);
             res.value += o.value.Substring(arg.asInt(),1);
             return res;
         }
 
-        public static IoObject slotReverse(IoObject target, IoObject locals, IoObject message)
+        public static LimObject slotReverse(LimObject target, LimObject locals, LimObject message)
         {
-            IoMessage m = message as IoMessage;
-            IoSeq o = target as IoSeq;
-            IoSeq res = IoSeq.createObject(target.state);
+            LimMessage m = message as LimMessage;
+            LimSeq o = target as LimSeq;
+            LimSeq res = LimSeq.createObject(target.state);
             char[] A = o.asCharArray;
             Array.Reverse(A);
             res.value = new string(A);
             return res;
         }
 
-        public static IoObject size(IoObject target, IoObject locals, IoObject message)
+        public static LimObject size(LimObject target, LimObject locals, LimObject message)
         {
-            IoMessage m = message as IoMessage;
-            IoSeq o = target as IoSeq;
-            return IoNumber.newWithDouble(target.state, o.value.Length);
+            LimMessage m = message as LimMessage;
+            LimSeq o = target as LimSeq;
+            return LimNumber.newWithDouble(target.state, o.value.Length);
         }
 
 
-        public override IoObject clone(IoState state)
+        public override LimObject clone(LimState state)
 		{
-			IoSeq proto = state.protoWithInitFunc(name) as IoSeq;
-			IoSeq result = new IoSeq();
+			LimSeq proto = state.protoWithInitFunc(name) as LimSeq;
+			LimSeq result = new LimSeq();
 			result.state = state;
             result.value = proto.value;
 			result.createProtos();
@@ -118,9 +118,9 @@ namespace io
 			return result;
 		}
 
-        public override int compare(IoObject v)
+        public override int compare(LimObject v)
         {
-			if (v is IoSeq) return this.value.CompareTo((v as IoSeq).value);
+			if (v is LimSeq) return this.value.CompareTo((v as LimSeq).value);
             return base.compare(v);
         }
 
@@ -134,15 +134,15 @@ namespace io
             return value.ToString();
         }
 
-        public static IoSeq rawAsUnquotedSymbol(IoSeq s)
+        public static LimSeq rawAsUnquotedSymbol(LimSeq s)
         {
             string str = "";
             if (s.value.StartsWith("\"")) str = s.value.Substring(1, s.value.Length - 1);
             if (s.value.EndsWith("\"")) str = str.Substring(0,s.value.Length-2);
-            return IoSeq.createObject(s.state, str);
+            return LimSeq.createObject(s.state, str);
         }
 
-        public static IoSeq rawAsUnescapedSymbol(IoSeq s)
+        public static LimSeq rawAsUnescapedSymbol(LimSeq s)
         {
             string str = "";
             int i = 0;
@@ -178,7 +178,7 @@ namespace io
 
                 i++;
             }
-            return IoSeq.createObject(s.state, str);
+            return LimSeq.createObject(s.state, str);
         }
     }
 }

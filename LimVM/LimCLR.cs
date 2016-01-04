@@ -4,28 +4,28 @@ using System.Text;
 using System.Collections;
 using System.Reflection;
 
-namespace io
+namespace lim
 {
-    public class IoCLR : IoObject
+    public class LimClr : LimObject
     {
         public override string name { get { return "CLR"; } }
         public Hashtable usingNamespaces = new Hashtable();
         public Hashtable loadedAssemblies = new Hashtable();
-        public IoCLR() : base() { isActivatable = true; }
+        public LimClr() : base() { isActivatable = true; }
 
-        public new static IoCLR createProto(IoState state)
+        public new static LimClr createProto(LimState state)
         {
-            IoCLR cf = new IoCLR();
-            return cf.proto(state) as IoCLR;
+            LimClr cf = new LimClr();
+            return cf.proto(state) as LimClr;
         }
 
-        public new static IoCLR createObject(IoState state)
+        public new static LimClr createObject(LimState state)
         {
-            IoCLR cf = new IoCLR();
-            return cf.proto(state).clone(state) as IoCLR;
+            LimClr cf = new LimClr();
+            return cf.proto(state).clone(state) as LimClr;
         }
 
-        public IoCLR(IoState state, string name)
+        public LimClr(LimState state, string name)
         {
             isActivatable = true;
             this.state = state;
@@ -34,42 +34,42 @@ namespace io
             uniqueId = 0;
         }
 
-        public override IoObject proto(IoState state)
+        public override LimObject proto(LimState state)
         {
-            IoCLR pro = new IoCLR();
+            LimClr pro = new LimClr();
             pro.state = state;
             pro.uniqueId = 0;
             pro.createSlots();
             pro.createProtos();
             pro.isActivatable = true;
-            state.registerProtoWithFunc(pro.name, new IoStateProto(pro.name, pro, new IoStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(pro.name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
             //pro.protos.Add(state.protoWithInitFunc("Object"));
 
-            IoCFunction[] methodTable = new IoCFunction[] {
-                new IoCFunction("loadAssembly", new IoMethodFunc(IoCLR.slotLoadAssembly)),
-                new IoCFunction("using", new IoMethodFunc(IoCLR.slotUsing)),
-                new IoCFunction("getType", new IoMethodFunc(IoCLR.slotGetType)),
+            LimCFunction[] methodTable = new LimCFunction[] {
+                new LimCFunction("loadAssembly", new LimMethodFunc(LimClr.slotLoadAssembly)),
+                new LimCFunction("using", new LimMethodFunc(LimClr.slotUsing)),
+                new LimCFunction("getType", new LimMethodFunc(LimClr.slotGetType)),
 			};
 
             pro.addTaglessMethodTable(state, methodTable);
             return pro;
         }
 
-        public override void cloneSpecific(IoObject from, IoObject to)
+        public override void cloneSpecific(LimObject from, LimObject to)
         {
             to.isActivatable = true;
         }
 
         // Published Slots
 
-        public static IoObject slotUsing(IoObject target, IoObject locals, IoObject message)
+        public static LimObject slotUsing(LimObject target, LimObject locals, LimObject message)
         {
-            IoCLR self = target as IoCLR;
-            IoMessage m = message as IoMessage;
-            IoSeq nameSpace = m.localsSymbolArgAt(locals, 0);
+            LimClr self = target as LimClr;
+            LimMessage m = message as LimMessage;
+            LimSeq nameSpace = m.localsSymbolArgAt(locals, 0);
             bool validNamespace = false;
-            IoCLRAssembly foundInAssembly = null;
-            foreach (IoCLRAssembly asm in self.loadedAssemblies.Values)
+            LimClrAssembly foundInAssembly = null;
+            foreach (LimClrAssembly asm in self.loadedAssemblies.Values)
             {
                 if (asm.assemblyNamespaces[nameSpace.value] != null)
                 {
@@ -89,18 +89,18 @@ namespace io
             return self;
         }
 
-        public static IoObject slotLoadAssembly(IoObject target, IoObject locals, IoObject message)
+        public static LimObject slotLoadAssembly(LimObject target, LimObject locals, LimObject message)
         {
-            IoCLR self = target as IoCLR;
-            IoMessage m = message as IoMessage;
-            IoSeq assemblyName = m.localsSymbolArgAt(locals, 0);
-            IoCLRAssembly asm = self.loadedAssemblies[assemblyName.value] as IoCLRAssembly;
+            LimClr self = target as LimClr;
+            LimMessage m = message as LimMessage;
+            LimSeq assemblyName = m.localsSymbolArgAt(locals, 0);
+            LimClrAssembly asm = self.loadedAssemblies[assemblyName.value] as LimClrAssembly;
             if (asm != null)
             {
                 return asm;
             }
 
-            asm = IoCLRAssembly.createObject(target.state);
+            asm = LimClrAssembly.createObject(target.state);
 
             asm.assembly = Assembly.LoadWithPartialName(assemblyName.value);
             if (asm.assembly == null) return self;
@@ -134,27 +134,27 @@ namespace io
             return asm;
         }
 
-        public static IoObject slotGetType(IoObject target, IoObject locals, IoObject message)
+        public static LimObject slotGetType(LimObject target, LimObject locals, LimObject message)
         {
-            IoCLR self = target as IoCLR;
-            IoMessage m = message as IoMessage;
-            IoSeq typeName = m.localsSymbolArgAt(locals, 0);
-            IoObject obj = self.getType(target.state, typeName.value);
-            return obj == null ? target.state.ioNil : obj;
+            LimClr self = target as LimClr;
+            LimMessage m = message as LimMessage;
+            LimSeq typeName = m.localsSymbolArgAt(locals, 0);
+            LimObject obj = self.getType(target.state, typeName.value);
+            return obj == null ? target.state.LimNil : obj;
         }
 
         // Public methos
 
-        public IoObject getType(IoState state, string typeName)
+        public LimObject getType(LimState state, string typeName)
         {
             Type t = null;
             foreach (string s in this.usingNamespaces.Keys)
             {
-                IoCLRAssembly asm = this.usingNamespaces[s] as IoCLRAssembly;
+                LimClrAssembly asm = this.usingNamespaces[s] as LimClrAssembly;
                 t = asm.assembly.GetType(s + "." + typeName);
                 if (t != null)
                 {
-                    IoCLRObject obj = IoCLRObject.createObject(state) as IoCLRObject;
+                    LimClrObject obj = LimClrObject.createObject(state) as LimClrObject;
                     obj.clrType = t;
                     obj.clrInstance = null;
                     return obj;
@@ -164,11 +164,11 @@ namespace io
             {
                 foreach (string s in this.loadedAssemblies.Keys)
                 {
-                    IoCLRAssembly asm = this.loadedAssemblies[s] as IoCLRAssembly;
+                    LimClrAssembly asm = this.loadedAssemblies[s] as LimClrAssembly;
                     t = asm.assembly.GetType(typeName);
                     if (t != null)
                     {
-                        IoCLRObject obj = IoCLRObject.createObject(state) as IoCLRObject;
+                        LimClrObject obj = LimClrObject.createObject(state) as LimClrObject;
                         obj.clrType = t;
                         obj.clrInstance = null;
                         return obj;
@@ -178,16 +178,16 @@ namespace io
             return null;
         }
 
-        public IoCLRObject getType(string typeName)
+        public LimClrObject getType(string typeName)
         {
             Type t = null;
             foreach (string s in this.usingNamespaces.Keys)
             {
-                IoCLRAssembly asm = this.usingNamespaces[s] as IoCLRAssembly;
+                LimClrAssembly asm = this.usingNamespaces[s] as LimClrAssembly;
                 t = asm.assembly.GetType(s + typeName);
                 if (t != null)
                 {
-                    IoCLRObject obj = new IoCLRObject();
+                    LimClrObject obj = new LimClrObject();
                     obj.clrType = t;
                     obj.clrInstance = null;
                 }
@@ -195,7 +195,7 @@ namespace io
             return null;
         }
 
-        public override IoObject activate(IoObject self, IoObject target, IoObject locals, IoMessage m, IoObject slotContext)
+        public override LimObject activate(LimObject self, LimObject target, LimObject locals, LimMessage m, LimObject slotContext)
         {
             return self;
         }

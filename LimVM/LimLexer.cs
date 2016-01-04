@@ -2,9 +2,9 @@
 using System;
 using System.Collections;
 
-namespace io {
+namespace lim {
 
-	public class IoLexer {
+	public class LimLexer {
 
 		public static string specialChars = ":._";
 		public string s;
@@ -17,12 +17,12 @@ namespace io {
 		public Stack tokenStack = new Stack();
 		public ArrayList tokenStream = new ArrayList();
 		public int resultIndex = 0;
-		public IoToken errorToken;
+		public LimToken errorToken;
 		public string errorDescription;
 
 		public void print()
 		{
-			IoToken first = tokenStream[0] as IoToken;
+			LimToken first = tokenStream[0] as LimToken;
 			if (first != null)
 			{
 				first.print();
@@ -35,7 +35,7 @@ namespace io {
 			int i;
 			for (i = 0; i < tokenStream.Count; i ++)
 			{
-				IoToken t = tokenStream[i] as IoToken;
+				LimToken t = tokenStream[i] as LimToken;
 				Console.Write("'{0}' {1}", t.name, t.typeName());
 				if (i < tokenStream.Count - 1)
 				{
@@ -62,7 +62,7 @@ namespace io {
 					}
 					else
 					{
-						errorToken = addTokenStringType(s.Substring(currentPos, 30), IoTokenType.NO_TOKEN);
+						errorToken = addTokenStringType(s.Substring(currentPos, 30), LimTokenType.NO_TOKEN);
 					}
 
 					errorToken.error = "Syntax error near this location";
@@ -72,10 +72,10 @@ namespace io {
 			return 0;
 		}
 
-        public IoToken top()
+        public LimToken top()
         {
             if (resultIndex >= tokenStream.Count) return null;
-            return tokenStream[resultIndex] as IoToken;
+            return tokenStream[resultIndex] as LimToken;
         }
 
 		public int lastPos() 
@@ -95,15 +95,15 @@ namespace io {
             posStack.Pop();
 		}
 
-        public IoTokenType topType()
+        public LimTokenType topType()
         {
             if (top() == null) return 0;
             return top().type;
         }
 
-        public IoToken pop()
+        public LimToken pop()
         {
-            IoToken first = top();
+            LimToken first = top();
             resultIndex++;
             return first;
         }
@@ -116,7 +116,7 @@ namespace io {
             {
                 if (i != topIndex)
                 {
-                    IoToken parent = currentToken();
+                    LimToken parent = currentToken();
                     if (parent != null)
                     {
                         parent.nextToken = null;
@@ -170,7 +170,7 @@ namespace io {
 			return i2 - i1;
 		}
 
-		public IoToken grabTokenType(IoTokenType type)
+		public LimToken grabTokenType(LimTokenType type)
 		{
 			int len = grabLength();
 
@@ -178,7 +178,7 @@ namespace io {
 
 			if (len == 0)
 			{
-				throw new Exception("IoLexer fatal error: empty token\n");
+				throw new Exception("LimLexer fatal error: empty token\n");
 			}
 
 			return addTokenStringType(s1, type);
@@ -189,11 +189,11 @@ namespace io {
 			return 0;
 		}
 
-		public IoToken addTokenStringType(string s1, IoTokenType type)
+		public LimToken addTokenStringType(string s1, LimTokenType type)
 		{
 		
-            IoToken top = currentToken();
-        	IoToken t = new IoToken();
+            LimToken top = currentToken();
+        	LimToken t = new LimToken();
 
 			t.lineNumber = currentLineNumber();
 			t.charNumber = currentPos;
@@ -215,10 +215,10 @@ namespace io {
 			return t;
 		}
 
-      	public IoToken currentToken()
+      	public LimToken currentToken()
         {
             if (tokenStream.Count == 0) return null;
-        	return tokenStream[tokenStream.Count-1] as IoToken;
+        	return tokenStream[tokenStream.Count-1] as LimToken;
         }
 
         // message chain
@@ -245,7 +245,7 @@ namespace io {
 			if (grabLength() != 0)
 			{
 				if (s[currentPos - 1] == ':' && s[currentPos] == '=') prevChar();
-				grabTokenType(IoTokenType.IDENTIFIER_TOKEN);
+				grabTokenType(LimTokenType.IDENTIFIER_TOKEN);
 				popPos();
 				return 1;
 			}
@@ -269,7 +269,7 @@ namespace io {
 
 			if (grabLength() != 0)
 			{
-				grabTokenType(IoTokenType.IDENTIFIER_TOKEN);
+				grabTokenType(LimTokenType.IDENTIFIER_TOKEN);
 				popPos();
 				return 1;
 
@@ -287,7 +287,7 @@ namespace io {
 
 		// helpers
 
-		public int readTokenCharsType(string chars, IoTokenType type)
+		public int readTokenCharsType(string chars, LimTokenType type)
 		{
 			foreach (char c in chars)
 			{
@@ -297,7 +297,7 @@ namespace io {
 			return 0;
 		}
 
-		public int readTokenCharType(char c, IoTokenType type)
+		public int readTokenCharType(char c, LimTokenType type)
 		{
 			pushPos();
 
@@ -318,7 +318,7 @@ namespace io {
 
 			if (readString(s) != 0)
 			{
-				grabTokenType(IoTokenType.IDENTIFIER_TOKEN);
+				grabTokenType(LimTokenType.IDENTIFIER_TOKEN);
 				popPos();
 				return 1;
 			}
@@ -455,7 +455,7 @@ namespace io {
 
 		public int readSpecialChar()
 		{
-			return readCharIn(IoLexer.specialChars);
+			return readCharIn(LimLexer.specialChars);
 		}
 
 		public int readDigit()
@@ -544,7 +544,7 @@ namespace io {
 					}
 				}
 
-				grabTokenType(IoTokenType.MONOQUOTE_TOKEN);
+				grabTokenType(LimTokenType.MONOQUOTE_TOKEN);
 				popPos();
 				return 1;
 			}
@@ -570,7 +570,7 @@ namespace io {
 					}
 				}
 	
-				grabTokenType(IoTokenType.TRIQUOTE_TOKEN);
+				grabTokenType(LimTokenType.TRIQUOTE_TOKEN);
 				popPos();
 				return 1;
 			}
@@ -595,15 +595,15 @@ namespace io {
 
 			if (terminated != 0)
 			{
-				IoToken top = currentToken();
+				LimToken top = currentToken();
 
 				// avoid double terminators
-				if (top != null && top.type == IoTokenType.TERMINATOR_TOKEN)
+				if (top != null && top.type == LimTokenType.TERMINATOR_TOKEN)
 				{
 					return 1;
 				}
 
-				addTokenStringType(";", IoTokenType.TERMINATOR_TOKEN);
+				addTokenStringType(";", LimTokenType.TERMINATOR_TOKEN);
 				popPos();
 				return 1;
 			}
@@ -763,7 +763,7 @@ namespace io {
 
 			if (grabLength()!=0)
 			{
-				grabTokenType(IoTokenType.NUMBER_TOKEN);
+				grabTokenType(LimTokenType.NUMBER_TOKEN);
 				popPos();
 				return 1;
 			}
@@ -787,7 +787,7 @@ error:
 
 			if (read != 0 && grabLength() != 0)
 			{
-				grabTokenType(IoTokenType.HEXNUMBER_TOKEN);
+				grabTokenType(LimTokenType.HEXNUMBER_TOKEN);
 				popPos();
 				return 1;
 			}
@@ -808,7 +808,7 @@ error:
 				case '{': return "curlyBrackets";
 			}
 
-			throw new Exception("IoLexer: fatal error - invalid group char" + groupChar);
+			throw new Exception("LimLexer: fatal error - invalid group char" + groupChar);
 		}
 
 		public void readMessageError(string name)
@@ -837,18 +837,18 @@ error:
              groupChar == '('))
 			{
 				string groupName = nameForGroupChar(groupChar);
-				addTokenStringType(groupName, IoTokenType.IDENTIFIER_TOKEN);
+				addTokenStringType(groupName, LimTokenType.IDENTIFIER_TOKEN);
 			}
 
-			if (readTokenCharsType("([{", IoTokenType.OPENPAREN_TOKEN) != 0)
+			if (readTokenCharsType("([{", LimTokenType.OPENPAREN_TOKEN) != 0)
 			{
 				readPadding();
 				do {
-					IoTokenType type = currentToken().type;
+					LimTokenType type = currentToken().type;
 					readPadding();
 				
 					// Empty argument: (... ,)
-					if (IoTokenType.COMMA_TOKEN == type)
+					if (LimTokenType.COMMA_TOKEN == type)
 					{
 						char c = current;
 						if (',' == c || ")]}".IndexOf(c) != -1)
@@ -863,9 +863,9 @@ error:
 					if (groupChar == '[') specialChars = ":._";
 					readPadding();
 
-				} while (readTokenCharType(',', IoTokenType.COMMA_TOKEN) != 0);
+				} while (readTokenCharType(',', LimTokenType.COMMA_TOKEN) != 0);
 
-				if (readTokenCharsType(")]}", IoTokenType.CLOSEPAREN_TOKEN) == 0)
+				if (readTokenCharsType(")]}", LimTokenType.CLOSEPAREN_TOKEN) == 0)
 				{
 					if (groupChar == '(')
 					{

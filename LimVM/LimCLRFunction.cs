@@ -4,30 +4,30 @@ using System.Text;
 using System.Reflection;
 using System.Collections;
 
-namespace io
+namespace lim
 {
-    public class IoCLRFunction : IoObject
+    public class LimClrFunction : LimObject
     {
         public bool async = false;
         public override string name { get { return "CLRFunction"; } }
         public MethodBase methodInfo;
         public Type[] parametersTypes;
         public ArrayList evaluatedParameters;
-        public IoCLRFunction() : base() { isActivatable = true; }
+        public LimClrFunction() : base() { isActivatable = true; }
 
-        public new static IoCLRFunction createProto(IoState state)
+        public new static LimClrFunction createProto(LimState state)
         {
-            IoCLRFunction cf = new IoCLRFunction();
-            return cf.proto(state) as IoCLRFunction;
+            LimClrFunction cf = new LimClrFunction();
+            return cf.proto(state) as LimClrFunction;
         }
 
-        public new static IoCLRFunction createObject(IoState state)
+        public new static LimClrFunction createObject(LimState state)
         {
-            IoCLRFunction cf = new IoCLRFunction();
-            return cf.proto(state).clone(state) as IoCLRFunction;
+            LimClrFunction cf = new LimClrFunction();
+            return cf.proto(state).clone(state) as LimClrFunction;
         }
 
-        public IoCLRFunction(IoState state, string name)
+        public LimClrFunction(LimState state, string name)
         {
             isActivatable = true;
             this.state = state;
@@ -36,40 +36,40 @@ namespace io
             uniqueId = 0;
         }
 
-        public override IoObject proto(IoState state)
+        public override LimObject proto(LimState state)
         {
-            IoCLRFunction pro = new IoCLRFunction();
+            LimClrFunction pro = new LimClrFunction();
             pro.state = state;
             pro.uniqueId = 0;
             pro.createSlots();
             pro.createProtos();
             pro.isActivatable = true;
-            state.registerProtoWithFunc(pro.name, new IoStateProto(pro.name, pro, new IoStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(pro.name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
             //pro.protos.Add(state.protoWithInitFunc("Object"));
 
-            IoCFunction[] methodTable = new IoCFunction[] {
+            LimCFunction[] methodTable = new LimCFunction[] {
 			};
 
             pro.addTaglessMethodTable(state, methodTable);
             return pro;
         }
 
-        public override IoObject activate(IoObject self, IoObject target, IoObject locals, IoMessage m, IoObject slotContext)
+        public override LimObject activate(LimObject self, LimObject target, LimObject locals, LimMessage m, LimObject slotContext)
         {
-            IoCLRFunction method = self as IoCLRFunction;
-            IoCLRObject obj = target as IoCLRObject;
+            LimClrFunction method = self as LimClrFunction;
+            LimClrObject obj = target as LimClrObject;
             object result = null;
 
             object[] parameters = new object[method.evaluatedParameters.Count];
             for (int i = 0; i < method.evaluatedParameters.Count; i++)
             {
-                IoObject ep = method.evaluatedParameters[i] as IoObject;
+                LimObject ep = method.evaluatedParameters[i] as LimObject;
                 switch (ep.name)
                 {
                     case "Object": parameters[i] = ep; break;
                     case "Number":
                         {
-                            IoNumber num = ep as IoNumber;
+                            LimNumber num = ep as LimNumber;
                             if (num.isInteger)
                             {
                                 parameters[i] = num.longValue;
@@ -81,13 +81,13 @@ namespace io
 
                         }
                         break;
-                    case "Sequence": parameters[i] = (ep as IoSeq).value; break;
-                    case "CLRObject": parameters[i] = (ep as IoCLRObject).clrInstance; break;
+                    case "Sequence": parameters[i] = (ep as LimSeq).value; break;
+                    case "CLRObject": parameters[i] = (ep as LimClrObject).clrInstance; break;
                 }
 
             }
 
-            IoCLRObject clr = IoCLRObject.createObject(self.state);
+            LimClrObject clr = LimClrObject.createObject(self.state);
 
             try
             {
