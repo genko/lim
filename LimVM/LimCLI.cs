@@ -1,21 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Collections;
-using System.Reflection.Emit;
 
 namespace lim
 {
-	public class LimCLI {
+	public static class LimCLI
+	{
+	   public static string[] m_args;
 
-        static void Main()
+        static int Main(string[] args)
         {
             LimState state = new LimState();
+            m_args = args;
             state.prompt(state);
-
+           return 0;
         }
-
     }
 }

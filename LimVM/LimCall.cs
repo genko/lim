@@ -72,20 +72,6 @@ namespace lim {
             return self.msg;
         }
 
-
-		//public override LimObject clone(LimState state)
-		//{
-		//    LimObject proto = state.protoWithInitFunc(name);
-		//    LimCall result = new LimCall();
-		//    uniqueIdCounter++;
-		//    result.uniqueId = uniqueIdCounter;
-		//    result.state = state;
-		//    result.createProtos();
-		//    result.createSlots();
-		//    result.protos.Add(proto);
-		//    return result;
-		//}
-
         public static LimObject with(LimState state, LimObject sender, LimObject target,
             LimObject message, LimObject slotContext, LimObject activated, LimObject coro)
         {
@@ -100,6 +86,4 @@ namespace lim {
             return call;
         }
     }
-
 }
-

@@ -67,6 +67,7 @@
     <Compile Include="LimCLRAssembly.cs" />
     <Compile Include="LimCLRFunction.cs" />
     <Compile Include="LimCLRObject.cs" />
+    <Compile Include="LimSystem.cs" />
     <Compile Include="LimLexer.cs" />
     <Compile Include="LimList.cs">
       <SubType>Code</SubType>
@@ -75,6 +76,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LimMessage.cs" />
+    <Compile Include="LimConsole.cs" />
     <Compile Include="LimNumber.cs" />
     <Compile Include="LimObject.cs" />
     <Compile Include="LimSeq.cs" />
