@@ -2,7 +2,7 @@ using System;
 
 	public class LimList : LimObject
     {
-		public override string name { get { return "List"; } }
+		public override string getName() { return "List"; }
         public LimObjectArrayList list = new LimObjectArrayList();
 
 		public new static LimList createProto(LimState state)
@@ -20,11 +20,11 @@ using System;
 		public override LimObject proto(LimState state)
 		{
 			LimList pro = new LimList();
-            pro.state = state;
+            pro.setState(state);
             pro.createSlots();
             pro.createProtos();
             pro.list = new LimObjectArrayList();
-			state.registerProtoWithFunc(pro.name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
+			state.registerProtoWithFunc(pro.getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
 			pro.protos.Add(state.protoWithInitFunc("Object"));
 
             LimCFunction[] methodTable = new LimCFunction[] {
@@ -51,12 +51,12 @@ using System;
 
         public override LimObject clone(LimState state)
         {
-            LimObject proto = state.protoWithInitFunc(name);
+            LimObject proto = state.protoWithInitFunc(getName());
             LimList result = new LimList();
             uniqueIdCounter++;
             result.uniqueId = uniqueIdCounter;
             result.list = new LimObjectArrayList();
-            result.state = state;
+            result.setState(state);
             result.createProtos();
             result.createSlots();
             result.protos.Add(proto);
@@ -70,12 +70,12 @@ using System;
             LimObject value = (m as LimMessage).localsValueArgAt(locals, 1);
             try
             {
-                return LimNumber.newWithDouble(target.state, o.list.IndexOf(value));
+                return LimNumber.newWithDouble(target.getState(), o.list.IndexOf(value));
             }
             catch(ArgumentOutOfRangeException aoore)
             {
                 object ex = aoore;
-			    return target.state.LimNil;
+			    return target.getState().LimNil;
             }
 		}
 
@@ -92,13 +92,13 @@ using System;
         public static LimObject slotCapacity(LimObject target, LimObject locals, LimObject m)
 		{
 			LimList o = target as LimList;
-			return LimNumber.newWithDouble(target.state, o.list.Capacity);
+			return LimNumber.newWithDouble(target.getState(), o.list.Capacity);
 		}
 
         public static LimObject slotSize(LimObject target, LimObject locals, LimObject m)
 		{
 			LimList o = target as LimList;
-            return LimNumber.newWithDouble(target.state, o.list.Count);
+            return LimNumber.newWithDouble(target.getState(), o.list.Count);
 		}
 
         public void append(LimObject o)
@@ -139,7 +139,7 @@ using System;
         public static LimObject slotWith(LimObject target, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
-            LimList o = LimList.createObject(target.state) as LimList;
+            LimList o = LimList.createObject(target.getState()) as LimList;
 
             for (int i = 0; i < m.args.Count; i++)
             {
@@ -160,7 +160,7 @@ using System;
             LimNumber ind = m.localsNumberArgAt(locals, 0);
             LimList o = target as LimList;
             LimObject v = o.list[ind.asInt()] as LimObject;
-            return v == null ? target.state.LimNil : v;
+            return v == null ? target.getState().LimNil : v;
         }
 
         public static LimObject slotLast(LimObject target, LimObject locals, LimObject message)
@@ -172,7 +172,7 @@ using System;
                 LimObject e = o.list[o.list.Count - 1] as LimObject;
                 return e;
             }
-            return target.state.LimNil;
+            return target.getState().LimNil;
         }
 
         public static LimObject slotPop(LimObject target, LimObject locals, LimObject message)
@@ -187,7 +187,7 @@ using System;
             }
             else
             {
-                return target.state.LimNil;
+                return target.getState().LimNil;
             }
         }
 
@@ -219,7 +219,7 @@ using System;
             catch(ArgumentOutOfRangeException aoore)
             {
                 object ex = aoore;
-			    return target.state.LimNil;
+			    return target.getState().LimNil;
             }
 		}
 

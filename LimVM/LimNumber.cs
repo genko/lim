@@ -2,7 +2,7 @@ using System;
 
     public class LimNumber : LimObject
     {
- 		public override string name { get { return "Number"; } }
+ 		public override string getName() { return "Number"; }
         public object value
         {
             get
@@ -31,13 +31,13 @@ using System;
 		public override LimObject proto(LimState state)
 		{
 			LimNumber pro = new LimNumber();
-			pro.state = state;
+			pro.setState(state);
             pro.createSlots();
             pro.createProtos();
             pro.doubleValue = 0;
             pro.longValue = 0;
             pro.isInteger = true;
-            state.registerProtoWithFunc(name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
 			pro.protos.Add(state.protoWithInitFunc("Object"));
 
             LimCFunction[] methodTable = new LimCFunction[] {
@@ -65,7 +65,7 @@ using System;
         public static LimNumber newWithDouble(LimState state, double n)
         {
 			LimNumber fab = new LimNumber();
-			LimNumber num = state.protoWithInitFunc(fab.name) as LimNumber;
+			LimNumber num = state.protoWithInitFunc(fab.getName()) as LimNumber;
             num = num.clone(state) as LimNumber;
             num.isInteger = false;
             num.doubleValue = n;
@@ -154,7 +154,7 @@ using System;
             LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;
 			if (other == null) return self;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 (self.isInteger ? self.longValue : self.doubleValue) +
                 (other.isInteger ? other.longValue : other.doubleValue)
                     );
@@ -164,7 +164,7 @@ using System;
         {
             LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 (self.isInteger ? self.longValue : self.doubleValue) -
                 (other.isInteger ? other.longValue : other.doubleValue) 
                 );
@@ -174,7 +174,7 @@ using System;
         {
             LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 (self.isInteger ? self.longValue : self.doubleValue) *
                 (other.isInteger ? other.longValue : other.doubleValue) 
                 );
@@ -184,7 +184,7 @@ using System;
         {
             LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 (self.isInteger ? self.longValue : self.doubleValue) /
                 (other.isInteger ? other.longValue : other.doubleValue) 
                 );
@@ -193,7 +193,7 @@ using System;
         public static LimObject slotLog10(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 Math.Log10(self.isInteger ? self.longValue : self.doubleValue)
                 );
         }
@@ -201,7 +201,7 @@ using System;
         public static LimObject slotLog2(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 Math.Log(self.isInteger ? self.longValue : self.doubleValue, 2)
                 );
         }
@@ -209,26 +209,26 @@ using System;
         public static LimObject slotPi(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state, Math.PI);
+            return LimNumber.newWithDouble(target.getState(), Math.PI);
         }
 
         public static LimObject slotMinPositive(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state, Double.Epsilon);
+            return LimNumber.newWithDouble(target.getState(), Double.Epsilon);
         }
 
         public static LimObject slotE(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state, Math.E);
+            return LimNumber.newWithDouble(target.getState(), Math.E);
         }
 
         public static LimObject slotLog(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 Math.Log(self.isInteger ? self.longValue : self.doubleValue,
                 other.isInteger ? other.longValue : other.doubleValue)
                 );
@@ -238,7 +238,7 @@ using System;
         {
             LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 Math.Pow(self.isInteger ? self.longValue : self.doubleValue,
                 other.isInteger ? other.longValue : other.doubleValue)
                 );
@@ -247,7 +247,7 @@ using System;
         public static LimObject slotExp(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 Math.Exp(self.isInteger ? self.longValue : self.doubleValue)
                 );
         }
@@ -255,7 +255,7 @@ using System;
         public static LimObject slotRound(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber self = target as LimNumber;
-            return LimNumber.newWithDouble(target.state,
+            return LimNumber.newWithDouble(target.getState(),
                 Math.Round(self.isInteger ? self.longValue : self.doubleValue)
                 );
         }

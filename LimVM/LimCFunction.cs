@@ -3,7 +3,7 @@
    public class LimCFunction : LimObject
    {
       public bool async = false;
-      public override string name { get { return "CFunction"; } }
+      public override string getName() { return "CFunction"; }
       public LimMethodFunc func;
       public string funcName;
       public LimCFunction() : base() { isActivatable = true; }
@@ -25,7 +25,7 @@
       public LimCFunction(LimState state, string name, LimMethodFunc func)
       {
          isActivatable = true;
-         this.state = state;
+         this.setState(state);
          createSlots();
          createProtos();
          uniqueId = 0;
@@ -36,12 +36,12 @@
       public override LimObject proto(LimState state)
       {
          LimCFunction pro = new LimCFunction();
-         pro.state = state;
+         pro.setState(state);
          pro.uniqueId = 0;
          pro.createSlots();
          pro.createProtos();
          pro.isActivatable = true;
-         state.registerProtoWithFunc(pro.name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
+         state.registerProtoWithFunc(pro.getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
          pro.protos.Add(state.protoWithInitFunc("Object"));
 
          LimCFunction[] methodTable = new LimCFunction[] {

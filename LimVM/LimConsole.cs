@@ -3,7 +3,7 @@ using System;
 
     public class LimConsole : LimObject
     {
-      public override string name { get { return "Console"; } }
+      public override string getName() { return "Console"; }
 
 
       public new static LimConsole createProto(LimState state)
@@ -15,10 +15,10 @@ using System;
       public override LimObject proto(LimState state)
       {
          LimConsole pro = new LimConsole();
-         pro.state = state;
+         pro.setState(state);
             pro.createSlots();
             pro.createProtos();
-            state.registerProtoWithFunc(name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
          pro.protos.Add(state.protoWithInitFunc("Object"));
 
             LimCFunction[] methodTable = new LimCFunction[] {
@@ -43,13 +43,13 @@ using System;
         public static LimSeq readLine(LimObject target, LimObject locals, LimObject message)
         {
            LimConsole o = target as LimConsole;
-           return LimSeq.createObject(o.state, Console.ReadLine());
+           return LimSeq.createObject(o.getState(), Console.ReadLine());
         }
 
         public static LimSeq readKey(LimObject target, LimObject locals, LimObject message)
         {
            LimConsole o = target as LimConsole;
-           return LimSeq.createObject(o.state, Console.ReadKey().KeyChar.ToString());
+           return LimSeq.createObject(o.getState(), Console.ReadKey().KeyChar.ToString());
         }
 
     }

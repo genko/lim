@@ -3,7 +3,7 @@ using System.Collections;
 
 	public class LimMap : LimObject
     {
-		public override string name { get { return "Map"; } }
+		public override string getName() { return "Map"; }
 		public Hashtable map = new Hashtable();
 
 		public new static LimMap createProto(LimState state)
@@ -15,11 +15,11 @@ using System.Collections;
 		public override LimObject proto(LimState state)
 		{
 			LimMap pro = new LimMap();
-            pro.state = state;
+            pro.setState(state);
             pro.createSlots();
             pro.createProtos();
             pro.map = new Hashtable(); 
-            state.registerProtoWithFunc(pro.name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(pro.getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
 			pro.protos.Add(state.protoWithInitFunc("Object"));
 
             LimCFunction[] methodTable = new LimCFunction[] {
@@ -52,8 +52,8 @@ using System.Collections;
         public static LimObject slotSize(LimObject target, LimObject locals, LimObject m)
 		{
 			LimMap dict = target as LimMap;
-			if (dict.map != null) return LimNumber.newWithDouble(dict.state, dict.map.Count);
-			return dict.state.LimNil;
+			if (dict.map != null) return LimNumber.newWithDouble(dict.getState(), dict.map.Count);
+			return dict.getState().LimNil;
 		}
 
 		public object lookupMap(object k)
@@ -80,7 +80,7 @@ using System.Collections;
 			if (result == null && m.args.Count > 1) {
 				result = m.localsValueArgAt(locals, 1);
 			}
-			return result == null ? dict.state.LimNil : result;
+			return result == null ? dict.getState().LimNil : result;
 		}
 
         public static LimObject slotAtPut(LimObject target, LimObject locals, LimObject message)
@@ -120,9 +120,9 @@ using System.Collections;
 			LimObject key = m.localsValueArgAt(locals, 0);
             if (dict.lookupMap(key) == null)
             {
-				return dict.state.LimFalse;
+				return dict.getState().LimFalse;
 			}
-			return dict.state.LimTrue;
+			return dict.getState().LimTrue;
 		}
 
 		public static LimObject slotHasValue(LimObject target, LimObject locals, LimObject message)
@@ -132,9 +132,9 @@ using System.Collections;
 			LimObject val = m.localsValueArgAt(locals, 0);
 			if (dict.lookupMapValues(val) == null)
 			{
-				return dict.state.LimFalse;
+				return dict.getState().LimFalse;
 			}
-			return dict.state.LimTrue;
+			return dict.getState().LimTrue;
 		}
 
 	}

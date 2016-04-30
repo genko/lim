@@ -9,7 +9,7 @@
 
 	public class LimCall : LimObject
     {
-        public override string name { get { return "Call"; } }
+        public override string getName() { return "Call"; }
         public LimObject sender;
         public LimObject msg;
         public LimObject target;
@@ -33,10 +33,10 @@
         public override LimObject proto(LimState state)
         {
             LimCall pro = new LimCall();
-            pro.state = state;
+            pro.setState(state);
             pro.createSlots();
             pro.createProtos(); 
-            state.registerProtoWithFunc(name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
             pro.protos.Add(state.protoWithInitFunc("Object"));
 
             LimCFunction[] methodTable = new LimCFunction[] {

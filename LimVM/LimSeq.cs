@@ -1,6 +1,6 @@
     public class LimSeq : LimObject
     {
-        public override string name { get { return "Sequence"; } }
+        public override string getName() { return "Sequence"; }
         public string value = System.String.Empty;
 
         public char[] asCharArray { get { return value.ToCharArray(); } }
@@ -20,7 +20,7 @@
         public static LimSeq createObject(LimSeq symbol)
         {
             LimSeq seq = new LimSeq();
-            seq = seq.clone(symbol.state) as LimSeq;
+            seq = seq.clone(symbol.getState()) as LimSeq;
             seq.value = symbol.value;
             return seq;
         }
@@ -43,12 +43,12 @@
         public override LimObject proto(LimState state)
 		{
 			LimSeq pro = new LimSeq();
-            pro.state = state;
+            pro.setState(state);
 		//	pro.tag.cloneFunc = new IoTagCloneFunc(this.clone);
         //    pro.tag.compareFunc = new IoTagCompareFunc(this.compare);
             pro.createSlots();
             pro.createProtos();
-            state.registerProtoWithFunc(name, new LimStateProto(name, pro, new LimStateProtoFunc(this.proto)));
+            state.registerProtoWithFunc(getName(), new LimStateProto(getName(), pro, new LimStateProtoFunc(this.proto)));
 			pro.protos.Add(state.protoWithInitFunc("Object"));
 
             LimCFunction[] methodTable = new LimCFunction[] {
@@ -75,7 +75,7 @@
         {
             LimMessage m = message as LimMessage;
             LimSeq o = target as LimSeq;
-            LimSeq res = LimSeq.createObject(target.state);
+            LimSeq res = LimSeq.createObject(target.getState());
             LimNumber arg = m.localsNumberArgAt(locals, 0);
             res.value += o.value.Substring(arg.asInt(),1);
             return res;
@@ -85,7 +85,7 @@
         {
             LimMessage m = message as LimMessage;
             LimSeq o = target as LimSeq;
-            LimSeq res = LimSeq.createObject(target.state);
+            LimSeq res = LimSeq.createObject(target.getState());
             char[] A = o.asCharArray;
             System.Array.Reverse(A);
             res.value = new string(A);
@@ -96,15 +96,15 @@
         {
             LimMessage m = message as LimMessage;
             LimSeq o = target as LimSeq;
-            return LimNumber.newWithDouble(target.state, o.value.Length);
+            return LimNumber.newWithDouble(target.getState(), o.value.Length);
         }
 
 
         public override LimObject clone(LimState state)
 		{
-			LimSeq proto = state.protoWithInitFunc(name) as LimSeq;
+			LimSeq proto = state.protoWithInitFunc(getName()) as LimSeq;
 			LimSeq result = new LimSeq();
-			result.state = state;
+			result.setState(state);
             result.value = proto.value;
 			result.createProtos();
 			result.createSlots();
@@ -133,7 +133,7 @@
             string str = "";
             if (s.value.StartsWith("\"")) str = s.value.Substring(1, s.value.Length - 1);
             if (s.value.EndsWith("\"")) str = str.Substring(0,s.value.Length-2);
-            return LimSeq.createObject(s.state, str);
+            return LimSeq.createObject(s.getState(), str);
         }
 
         public static LimSeq rawAsUnescapedSymbol(LimSeq s)
@@ -172,6 +172,6 @@
 
                 i++;
             }
-            return LimSeq.createObject(s.state, str);
+            return LimSeq.createObject(s.getState(), str);
         }
     }

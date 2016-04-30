@@ -56,12 +56,22 @@ using System.Collections;
 
     public class LimObject
     {
-      public LimState _state = null;
-      public LimState state { set { _state = value; 
-         if (slots != null) slots.state = value; } get { return _state; } }
+        public LimState _state = null;
+
+        public LimState getState()
+        {
+            return _state;
+        }
+
+        public void setState(LimState value)
+        {
+            _state = value; 
+            if (slots != null) slots.state = value;
+        }
+
         public static long uniqueIdCounter = 0;
         public long uniqueId = 0;
-        public virtual string name { get { return "Object"; } }
+        public virtual string getName() { return "Object"; }
         public LimSeqObjectHashtable slots;
         public LimObjectArrayList listeners;
         public LimObjectArrayList protos;
@@ -84,25 +94,25 @@ using System.Collections;
         public virtual LimObject proto(LimState state)
         {
             LimObject pro = new LimObject();
-            pro.state = state;
+            pro.setState(state);
             pro.createSlots();
             pro.createProtos();
             pro.uniqueId = 0;
-            state.registerProtoWithFunc(name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
             return pro;
         }
 
         public virtual LimObject clone(LimState state)
         {
-            LimObject proto = state.protoWithInitFunc(name);
+            LimObject proto = state.protoWithInitFunc(getName());
             LimObject o = Activator.CreateInstance(this.GetType()) as LimObject;//typeof(this)new LimObject();
             uniqueIdCounter++;
             o.uniqueId = uniqueIdCounter;
-         o.state = proto.state;
+            o.setState(proto.getState());
             o.createSlots();
             o.createProtos();
             o.protos.Add(proto);
-         cloneSpecific(this, o);
+            cloneSpecific(this, o);
             return o;
         }
 
@@ -154,7 +164,7 @@ using System.Collections;
                 new LimCFunction("yieldingCoros", new LimMethodFunc(LimObject.slotYieldingCoros)),
                 new LimCFunction("while", new LimMethodFunc(LimObject.slotWhile))
             };
-            LimObject o = state.protoWithInitFunc(name);
+            LimObject o = state.protoWithInitFunc(getName());
             o.addTaglessMethodTable(state, methodTable);
             return o;
         }
@@ -165,7 +175,7 @@ using System.Collections;
         {
             LimMessage m = message as LimMessage;
             LimObject o = m.localsValueArgAt(locals, 0);
-            return LimNumber.newWithDouble(self.state, Convert.ToDouble(self.compare(o)));
+            return LimNumber.newWithDouble(self.getState(), Convert.ToDouble(self.compare(o)));
         }
 
         public virtual int compare(LimObject v)
@@ -177,49 +187,49 @@ using System.Collections;
         {
             LimMessage m = message as LimMessage;
             LimObject o = m.localsValueArgAt(locals, 0);
-            return self.compare(o) == 0 ? self.state.LimTrue : self.state.LimFalse;
+            return self.compare(o) == 0 ? self.getState().LimTrue : self.getState().LimFalse;
         }
 
         public static LimObject slotNotEquals(LimObject self, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
             LimObject o = m.localsValueArgAt(locals, 0);
-            return self.compare(o) != 0 ? self.state.LimTrue : self.state.LimFalse;
+            return self.compare(o) != 0 ? self.getState().LimTrue : self.getState().LimFalse;
         }
 
         public static LimObject slotGreaterThanOrEqual(LimObject self, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
             LimObject o = m.localsValueArgAt(locals, 0);
-            return self.compare(o) >= 0 ? self.state.LimTrue : self.state.LimFalse;
+            return self.compare(o) >= 0 ? self.getState().LimTrue : self.getState().LimFalse;
         }
 
         public static LimObject slotLessThanOrEqual(LimObject self, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
             LimObject o = m.localsValueArgAt(locals, 0);
-            return self.compare(o) <= 0 ? self.state.LimTrue : self.state.LimFalse;
+            return self.compare(o) <= 0 ? self.getState().LimTrue : self.getState().LimFalse;
         }
 
         public static LimObject slotLessThan(LimObject self, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
             LimObject o = m.localsValueArgAt(locals, 0);
-            return self.compare(o) < 0 ? self.state.LimTrue : self.state.LimFalse;
+            return self.compare(o) < 0 ? self.getState().LimTrue : self.getState().LimFalse;
         }
 
         public static LimObject slotSubstract(LimObject self, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
             LimNumber o = m.localsNumberArgAt(locals, 0);
-            return LimNumber.newWithDouble(self.state, - o.asDouble());
+            return LimNumber.newWithDouble(self.getState(), - o.asDouble());
         }
 
         public static LimObject slotGreaterThan(LimObject self, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
             LimObject o = m.localsValueArgAt(locals, 0);
-            return self.compare(o) > 0 ? self.state.LimTrue : self.state.LimFalse;
+            return self.compare(o) > 0 ? self.getState().LimTrue : self.getState().LimFalse;
         }
 
         public static LimObject slotSelf(LimObject self, LimObject locals, LimObject m)
@@ -241,7 +251,7 @@ using System.Collections;
         public static LimObject slotClone(LimObject target, LimObject locals, LimObject m)
         {
             //LimObject newObject = target.tag.cloneFunc(target.state);
-            LimObject newObject = target.clone(target.state);
+            LimObject newObject = target.clone(target.getState());
             //newObject.protos.Clear();
             newObject.protos.Add(target);
             return target.initClone(target, locals, m as LimMessage, newObject);
@@ -251,13 +261,13 @@ using System.Collections;
         {
             LimMessage m = message as LimMessage;
             LimObject v = m.localsValueArgAt(locals, 0);
-            target.state.Return(v);
+            target.getState().Return(v);
             return target;
         }
 
         public static LimObject slotCloneWithoutInit(LimObject target, LimObject locals, LimObject m)
         {
-            return target.clone(target.state);
+            return target.clone(target.getState());
         }
 
         public static LimObject slotDoMessage(LimObject self, LimObject locals, LimObject m)
@@ -298,7 +308,7 @@ using System.Collections;
 
         public static LimObject slotType(LimObject target, LimObject locals, LimObject message)
         {
-         return LimSeq.createObject(target.state, target.name);
+         return LimSeq.createObject(target.getState(), target.getName());
         }
 
         public static LimObject slotEevalArg(LimObject target, LimObject locals, LimObject message)
@@ -329,7 +339,7 @@ using System.Collections;
             LimMessage m = message as LimMessage;
             LimSeq slotName = m.localsSymbolArgAt(locals, 0);
             LimObject slot = target.rawGetSlot(slotName);
-            return slot == null ? target.state.LimNil : slot;
+            return slot == null ? target.getState().LimNil : slot;
         }
 
         public static LimObject slotSetSlot(LimObject target, LimObject locals, LimObject message)
@@ -356,13 +366,13 @@ using System.Collections;
             }
             else
             {
-                LimObject theSelf = target.rawGetSlot(target.state.selfMessage.messageName);
+                LimObject theSelf = target.rawGetSlot(target.getState().selfMessage.messageName);
                 if (theSelf != null)
                 {
                     return theSelf.perform(theSelf, locals, m);
                 }
             }
-            return target.state.LimNil;
+            return target.getState().LimNil;
         }
 
         public static LimObject slotUpdateSlot(LimObject target, LimObject locals, LimObject message)
@@ -390,9 +400,9 @@ using System.Collections;
             LimSeq slotName = m.localsSymbolArgAt(locals, 0);
             LimObject slotValue = m.localsValueArgAt(locals, 1);
             target.slots[slotName] = slotValue;
-            if (slotValue.slots[target.state.typeSymbol] == null)
+            if (slotValue.slots[target.getState().typeSymbol] == null)
             {
-                slotValue.slots[target.state.typeSymbol] = slotName;
+                slotValue.slots[target.getState().typeSymbol] = slotName;
             }
             return slotValue;
         }
@@ -400,7 +410,7 @@ using System.Collections;
         public static LimObject slotMessage(LimObject target, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
-            return m.args.Count > 0 ? m.rawArgAt(0) : target.state.LimNil;
+            return m.args.Count > 0 ? m.rawArgAt(0) : target.getState().LimNil;
         }
 
         public static LimObject slotMethod(LimObject target, LimObject locals, LimObject message)
@@ -415,21 +425,21 @@ using System.Collections;
 
         public static LimObject slotLocalsForward(LimObject target, LimObject locals, LimObject message)
         {
-            LimObject o = target.slots[target.state.selfSymbol] as LimObject;
+            LimObject o = target.slots[target.getState().selfSymbol] as LimObject;
             if (o != null && o != target)
                 return target.perform(o, locals, message);
-            return target.state.LimNil;
+            return target.getState().LimNil;
         }
 
         public static LimObject slotIf(LimObject target, LimObject locals, LimObject message)
         {
             LimMessage m = message as LimMessage;
             LimObject r = m.localsValueArgAt(locals, 0);
-            bool condition = r != target.state.LimNil && r != target.state.LimFalse;
+            bool condition = r != target.getState().LimNil && r != target.getState().LimFalse;
            int index = condition ? 1 : 2;
            if (index < m.args.Count) 
               return m.localsValueArgAt(locals, index);
-            return condition ? target.state.LimTrue : target.state.LimFalse;
+            return condition ? target.getState().LimTrue : target.getState().LimFalse;
         }
 
         public static LimObject slotAsyncCall(LimObject target, LimObject locals, LimObject message)
@@ -454,7 +464,7 @@ using System.Collections;
                 ctx.locals = target;
                 ctx.message = mmm;
                 mmm.async = true;
-                LimState state = target.state;
+                LimState state = target.getState();
                 LimObject future = LimObject.createObject(state);
                 IEnumerator e = LimMessage.asyncCall(ctx, future);
                 state.contextList.Add(e);
@@ -473,12 +483,12 @@ using System.Collections;
         }
 
         public static LimObject slotYieldingCoros(LimObject target, LimObject locals, LimObject message) {
-            return LimNumber.newWithDouble(target.state, target.state.contextList.Count);
+            return LimNumber.newWithDouble(target.getState(), target.getState().contextList.Count);
         }
 
         public static LimObject slotYield(LimObject target, LimObject locals, LimObject message)
         {
-            LimState state = target.state;
+            LimState state = target.getState();
             ArrayList toDeleteThread = new ArrayList();
             for (int i = 0; i < state.contextList.Count; i++) {
                 IEnumerator e  = state.contextList[i] as IEnumerator;
@@ -501,7 +511,7 @@ using System.Collections;
         public static IEnumerator slotAsyncWhile(LimObject target, LimObject locals, LimObject message, LimObject future)
         {
             LimMessage m = message as LimMessage;
-            LimObject result = target.state.LimNil;
+            LimObject result = target.getState().LimNil;
             LimObject cond = null;
 
             while (true)
@@ -509,7 +519,7 @@ using System.Collections;
                 cond = m.localsValueArgAt(locals, 0);
                 //evaluateArgs(m, new EvaluateArgsEventArgs(0), out cond);
 
-                if (cond == target.state.LimFalse || cond == target.state.LimNil)
+                if (cond == target.getState().LimFalse || cond == target.getState().LimNil)
                 {
                     break;
                 }
@@ -533,7 +543,7 @@ using System.Collections;
 
                     do
                     {
-                        if (msg.messageName.Equals(msg.state.semicolonSymbol))
+                        if (msg.messageName.Equals(msg.getState().semicolonSymbol))
                         {
                             target = cachedTarget;
                         }
@@ -568,9 +578,9 @@ using System.Collections;
                     yield return null;
                 }
 
-                result = m.state.LimNil;
+                result = m.getState().LimNil;
 
-                if (target.state.handleStatus() != 0)
+                if (target.getState().handleStatus() != 0)
                 {
                     goto done;
                 }
@@ -586,26 +596,26 @@ using System.Collections;
 
             if (m.async)
             {
-                LimState state = target.state;
+                LimState state = target.getState();
                 LimObject future = LimObject.createObject(state);
                 IEnumerator e = LimObject.slotAsyncWhile(target, locals, message, future);
                 state.contextList.Add(e);
                 return future;
             }
 
-            LimObject result = target.state.LimNil;
+            LimObject result = target.getState().LimNil;
             while (true)
             {
                 bool sasync = m.async;
                 m.async = false;
                 LimObject cond = m.localsValueArgAt(locals, 0);
-                if (cond == target.state.LimFalse || cond == target.state.LimNil)
+                if (cond == target.getState().LimFalse || cond == target.getState().LimNil)
                 {
                     break;
                 }
                 m.async = sasync;
                 result = m.localsValueArgAt(locals, 1);
-                if (target.state.handleStatus() != 0)
+                if (target.getState().handleStatus() != 0)
                 {
                     goto done;
                 }
@@ -619,9 +629,9 @@ done:
         public LimObject initClone(LimObject target, LimObject locals, LimMessage m, LimObject newObject)
         {
             LimObject context = null;
-            LimObject initSlot = target.rawGetSlotContext(target.state.initMessage.messageName, out context);
+            LimObject initSlot = target.rawGetSlotContext(target.getState().initMessage.messageName, out context);
             if (initSlot != null)
-               initSlot.activate(initSlot, newObject, locals, target.state.initMessage, context);
+               initSlot.activate(initSlot, newObject, locals, target.getState().initMessage, context);
             return newObject;
         }
 
@@ -629,7 +639,7 @@ done:
         {
             foreach (LimCFunction entry in table)
             {
-                entry.state = state;
+                entry.setState(state);
                 slots[entry.funcName] = entry;
             }
         }
@@ -638,10 +648,10 @@ done:
         {
             LimMessage m = message as LimMessage;
             LimObject context = null;
-            LimObject forwardSlot = target.rawGetSlotContext(target.state.forwardMessage.messageName, out context);
+            LimObject forwardSlot = target.rawGetSlotContext(target.getState().forwardMessage.messageName, out context);
            
             Console.WriteLine("'{0}' does not respond to message '{1}'",
-                target.name, m.messageName.ToString());
+                target.getName(), m.messageName.ToString());
             return target;
         }
 
@@ -687,12 +697,12 @@ done:
             if (self.isActivatable)
             {
                 LimObject context = null;
-                LimObject slotValue = self.rawGetSlotContext(self.state.activateMessage.messageName, out context);
+                LimObject slotValue = self.rawGetSlotContext(self.getState().activateMessage.messageName, out context);
                 if (slotValue != null)
                 {
                     return activate(slotValue, target, locals, m, context); 
                 }
-                return state.LimNil;
+                return getState().LimNil;
             }
             else return self;
         }
@@ -700,7 +710,7 @@ done:
         public void createSlots()
         {
             if (slots == null)
-                slots = new LimSeqObjectHashtable(state);
+                slots = new LimSeqObjectHashtable(getState());
         }
 
         public void createProtos()
@@ -711,7 +721,7 @@ done:
 
       public LimObject slotsBySymbol(LimSeq symbol)
       {
-            LimSeq s = this.state.symbols[symbol.value] as LimSeq;
+            LimSeq s = this.getState().symbols[symbol.value] as LimSeq;
             if (s == null) return null;
             return slots[s] as LimObject;
       }
@@ -761,6 +771,6 @@ done:
 
       public override string ToString()
       {
-         return name + "+" + uniqueId;
+         return getName() + "+" + uniqueId;
       }
    }

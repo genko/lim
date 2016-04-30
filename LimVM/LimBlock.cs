@@ -1,7 +1,7 @@
    public class LimBlock : LimObject
    {
       public bool async = false;
-      public override string name { get { return "Block"; } }
+      public override string getName() { return "Block"; }
       public LimMessage containedMessage;
       public LimObjectArrayList argNames;
       public LimObject scope; // if 0x0, then use target as the locals proto
@@ -24,12 +24,12 @@
       public override LimObject proto(LimState state)
       {
          LimBlock pro = new LimBlock();
-         pro.state = state;
+         pro.setState(state);
          pro.createSlots();
          pro.createProtos();
          pro.containedMessage = state.nilMessage;
          pro.argNames = new LimObjectArrayList();
-         state.registerProtoWithFunc(name, new LimStateProto(name, pro, new LimStateProtoFunc(this.proto)));
+         state.registerProtoWithFunc(getName(), new LimStateProto(getName(), pro, new LimStateProtoFunc(this.proto)));
          pro.protos.Add(state.protoWithInitFunc("Object"));
 
          LimCFunction[] methodTable = new LimCFunction[] {
@@ -56,7 +56,7 @@
 
       public new static LimObject slotMethod(LimObject target, LimObject locals, LimObject message)
       {
-         LimState state = target.state;
+         LimState state = target.getState();
          LimBlock self = LimBlock.createObject(state);
          LimMessage m = message as LimMessage;
          int nargs = m.args.Count;
@@ -104,7 +104,7 @@
          LimSeq seq = LimMessage.slotCode(msg, locals, m) as LimSeq;
          s += seq.value + ")";
 
-         return LimSeq.createObject(target.state, s);
+         return LimSeq.createObject(target.getState(), s);
       }
 
       public static LimObject slotCall(LimObject target, LimObject locals, LimObject message)
@@ -116,7 +116,7 @@
 
       public override LimObject activate(LimObject sender, LimObject target, LimObject locals, LimMessage m, LimObject slotContext)
       {
-         LimState state = sender.state;
+         LimState state = sender.getState();
          LimBlock self = sender as LimBlock;
 
          LimObjectArrayList argNames = self.argNames;

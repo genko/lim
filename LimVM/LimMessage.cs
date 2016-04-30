@@ -5,7 +5,7 @@ using System.Collections;
 	public class LimMessage : LimObject
     {
         public bool async = false;
-		public override string name { get { return "Message"; } }
+		public override string getName() { return "Message"; }
         public LimSeq  messageName;
         public LimObjectArrayList args;
 		public LimMessage next;
@@ -28,8 +28,8 @@ using System.Collections;
 		public override LimObject proto(LimState state)
 		{
 			LimMessage pro = new LimMessage();
-            pro.state = state;
-          //  pro.tag.cloneFunc = new IoTagCloneFunc(this.clone);
+            pro.setState(state);
+            //pro.tag.cloneFunc = new IoTagCloneFunc(this.clone);
 			//pro.tag.activateFunc = new IoTagActivateFunc(this.activate);
             pro.createSlots();
             pro.createProtos();
@@ -37,7 +37,7 @@ using System.Collections;
             pro.messageName = LimSeq.createSymbolInMachine(state, "anonymous");
             pro.label = LimSeq.createSymbolInMachine(state, "unlabeled");
             pro.args = new LimObjectArrayList();
-            state.registerProtoWithFunc(name, new LimStateProto(name, pro, new LimStateProtoFunc(this.proto)));
+            state.registerProtoWithFunc(getName(), new LimStateProto(getName(), pro, new LimStateProtoFunc(this.proto)));
 			pro.protos.Add(state.protoWithInitFunc("Object"));
 
             LimCFunction[] methodTable = new LimCFunction[] {
@@ -91,7 +91,7 @@ using System.Collections;
         public static LimObject slotNext(LimObject target, LimObject locals, LimObject message)
         {
             LimMessage self = target as LimMessage;
-            return self.next == null ? target.state.LimNil : self.next;
+            return self.next == null ? target.getState().LimNil : self.next;
         }
 
         public static LimObject slotSetNext(LimObject target, LimObject locals, LimObject message)
@@ -100,11 +100,11 @@ using System.Collections;
             LimMessage msg = message as LimMessage;
             LimObject m = msg.localsMessageArgAt(locals, 0) as LimObject;
             LimMessage mmm = null;
-            if (m == target.state.LimNil)
+            if (m == target.getState().LimNil)
             {
                 mmm = null;
             }
-            else if (m.name.Equals("Message"))
+            else if (m.getName().Equals("Message"))
             {
                 mmm = m as LimMessage;
             }
@@ -121,13 +121,13 @@ using System.Collections;
             LimMessage self = target as LimMessage;
             string s = ""; 
             s = self.descriptionToFollow(true);
-            return LimSeq.createObject(self.state, s);
+            return LimSeq.createObject(self.getState(), s);
         }
 
         public static LimObject slotArguments(LimObject target, LimObject locals, LimObject message)
         {
             LimMessage self = target as LimMessage;
-            LimList list = LimList.createObject(target.state);
+            LimList list = LimList.createObject(target.getState());
             foreach (LimObject o in self.args)
             {
                 list.append(o);
@@ -147,7 +147,7 @@ using System.Collections;
         public static LimObject slotArgCount(LimObject target, LimObject locals, LimObject message)
         {
             LimMessage self = target as LimMessage;
-            return LimNumber.newWithDouble(target.state, Convert.ToDouble(self.args.Count));
+            return LimNumber.newWithDouble(target.getState(), Convert.ToDouble(self.args.Count));
         }
 
         public static LimObject slotArgAt(LimObject target, LimObject locals, LimObject message)
@@ -156,13 +156,13 @@ using System.Collections;
             LimMessage m = message as LimMessage;
             int index = m.localsNumberArgAt(locals, 0).asInt();
             LimObject v = self.args[index] as LimObject;
-            return v != null ? v : self.state.LimNil;
+            return v != null ? v : self.getState().LimNil;
         }
         
         public static LimObject slotCachedResult(LimObject target, LimObject locals, LimObject message)
         {
             LimMessage m = target as LimMessage;
-            return m.cachedResult == null ? target.state.LimNil : m.cachedResult;
+            return m.cachedResult == null ? target.getState().LimNil : m.cachedResult;
         }
 
         public static LimObject slotSetCachedResult(LimObject target, LimObject locals, LimObject message)
@@ -183,7 +183,7 @@ using System.Collections;
         public static LimObject slotHasCachedResult(LimObject target, LimObject locals, LimObject message)
         {
             LimMessage self = target as LimMessage;
-            return self.cachedResult == null ? target.state.LimFalse : target.state.LimTrue;
+            return self.cachedResult == null ? target.getState().LimFalse : target.getState().LimTrue;
         }
 
         // Message Public Raw Methods
@@ -255,7 +255,7 @@ using System.Collections;
 
             do
             {
-                if (msg.messageName.Equals(msg.state.semicolonSymbol))
+                if (msg.messageName.Equals(msg.getState().semicolonSymbol))
                 {
                     target = cachedTarget;
                 }
@@ -294,7 +294,7 @@ using System.Collections;
                 ctx.target = target;
                 ctx.locals = locals;
                 ctx.message = this;
-                LimState state = target.state;
+                LimState state = target.getState();
                 LimObject future = LimObject.createObject(state);
                 IEnumerator e = LimMessage.asyncCall(ctx, future);
                 state.contextList.Add(e);
@@ -306,7 +306,7 @@ using System.Collections;
             LimMessage msg = this;
             do
             {
-                if (msg.messageName.Equals(msg.state.semicolonSymbol))
+                if (msg.messageName.Equals(msg.getState().semicolonSymbol))
                 {
                     target = cachedTarget;
                 }
@@ -361,7 +361,7 @@ using System.Collections;
                 
                 return m.localsPerformOn(locals, locals);
             }
-            return this.state.LimNil;
+            return this.getState().LimNil;
         }
 
         // TODO: possible folding of following functions
@@ -369,7 +369,7 @@ using System.Collections;
         public LimSeq localsSymbolArgAt(LimObject locals, int i)
         {
 			LimObject o = localsValueArgAt(locals, i);
-			if (!o.name.Equals("Sequence"))
+			if (!o.getName().Equals("Sequence"))
 			{
 				localsNumberArgAtErrorForType(locals, i, "Sequence");
 
@@ -380,7 +380,7 @@ using System.Collections;
         public LimObject localsMessageArgAt(LimObject locals, int n)
         {
             LimObject v = localsValueArgAt(locals, n);
-            if (!v.name.Equals("Message") && v != state.LimNil)
+            if (!v.getName().Equals("Message") && v != getState().LimNil)
             {
                 localsNumberArgAtErrorForType(locals, n, "Message");
 
@@ -391,7 +391,7 @@ using System.Collections;
         public LimNumber localsNumberArgAt(LimObject locals, int i)
         {
             LimObject o = localsValueArgAt(locals, i);
-            if (o == null || !o.name.Equals("Number"))
+            if (o == null || !o.getName().Equals("Number"))
             {
                 localsNumberArgAtErrorForType(locals, i, "Number");
 
@@ -405,7 +405,7 @@ using System.Collections;
         {
             LimObject v = localsValueArgAt(locals, i);
             Console.WriteLine("argument {0} to method '{1}' must be a {2}, not a '{3}'",
-                i, this.messageName, p, v.name);
+                i, this.messageName, p, v.getName());
         }
 
         LimMessage newParse(LimState state, LimLexer lexer)
@@ -494,29 +494,29 @@ using System.Collections;
 					break;
 				case LimTokenType.MONOQUOTE_TOKEN:
                     r = LimSeq.createSymbolInMachine(
-                            method.state,
+                            method.getState(),
                             LimSeq.rawAsUnescapedSymbol(
                                 LimSeq.rawAsUnquotedSymbol(
-                                    LimSeq.createObject(method.state, method.value)
+                                    LimSeq.createObject(method.getState(), method.value)
                                 )
                             ).value
                         );
 					break;
 				case LimTokenType.NUMBER_TOKEN:
-					r = LimNumber.newWithDouble(this.state, Convert.ToDouble(method.value));
+					r = LimNumber.newWithDouble(this.getState(), Convert.ToDouble(method.value));
 					break;
                 default:
                     if (method.value.Equals("nil"))
                     {
-                        r = state.LimNil;
+                        r = getState().LimNil;
                     }
                     else if (method.value.Equals("true"))
                     {
-                        r = state.LimTrue;
+                        r = getState().LimTrue;
                     }
                     else if (method.value.Equals("false"))
                     {
-                        r = state.LimFalse;
+                        r = getState().LimFalse;
                     }
                     break;
 
@@ -527,7 +527,7 @@ using System.Collections;
 
         void parseNext(LimLexer lexer)
         {
-            LimMessage nextMessage = newParseNextMessageChain(this.state, lexer);
+            LimMessage nextMessage = newParseNextMessageChain(this.getState(), lexer);
             this.next = nextMessage;
         }
 
@@ -537,7 +537,7 @@ using System.Collections;
 
             if (lexer.top() != null && lexer.top().isValidMessageName())
             {
-                LimMessage arg = newParseNextMessageChain(this.state, lexer);
+                LimMessage arg = newParseNextMessageChain(this.getState(), lexer);
                 addArg(arg);
 
                 while (lexer.topType() == LimTokenType.COMMA_TOKEN)
@@ -546,7 +546,7 @@ using System.Collections;
 
                     if (lexer.top() != null && lexer.top().isValidMessageName())
                     {
-                        LimMessage arg2 = newParseNextMessageChain(this.state, lexer);
+                        LimMessage arg2 = newParseNextMessageChain(this.getState(), lexer);
                         addArg(arg2);
                     }
                     else
@@ -583,10 +583,10 @@ using System.Collections;
 		LimObject opShuffle()
 		{
             LimObject context = null;
-            LimObject m = this.rawGetSlotContext(state.opShuffleMessage.messageName, out context);
+            LimObject m = this.rawGetSlotContext(getState().opShuffleMessage.messageName, out context);
             if (m != null)
             {
-                state.opShuffleMessage.localsPerformOn(this, state.lobby);
+                getState().opShuffleMessage.localsPerformOn(this, getState().lobby);
             }
 			return this;
 		}

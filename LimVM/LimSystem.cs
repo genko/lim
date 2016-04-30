@@ -1,7 +1,7 @@
 
     public class LimSystem : LimObject
     {
-      public override string name { get { return "System"; } }
+      public override string getName() { return "System"; }
 
 
       public new static LimSystem createProto(LimState state)
@@ -13,10 +13,10 @@
       public override LimObject proto(LimState state)
       {
          LimSystem pro = new LimSystem();
-         pro.state = state;
+         pro.setState(state);
             pro.createSlots();
             pro.createProtos();
-            state.registerProtoWithFunc(name, new LimStateProto(pro.name, pro, new LimStateProtoFunc(pro.proto)));
+            state.registerProtoWithFunc(getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
          pro.protos.Add(state.protoWithInitFunc("Object"));
 
             LimCFunction[] methodTable = new LimCFunction[] {
@@ -40,10 +40,10 @@
         public static LimList args(LimObject target, LimObject locals, LimObject message)
         {
            LimSystem o = target as LimSystem;
-           LimList l = LimList.createObject(o.state);
+           LimList l = LimList.createObject(o.getState());
            for (int i = 0; i < LimState.args.Length; i++)
            {
-              l.append(LimSeq.createObject(o.state, LimState.args[i]));
+              l.append(LimSeq.createObject(o.getState(), LimState.args[i]));
            }
            return l;
         }
