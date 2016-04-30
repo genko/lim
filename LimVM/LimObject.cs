@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 
-namespace lim
-{
     // DEBUG HELPER
 
     public class LimObjectArrayList : ArrayList
@@ -766,5 +764,3 @@ done:
          return name + "+" + uniqueId;
       }
    }
-
-}

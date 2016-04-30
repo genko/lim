@@ -1,5 +1,3 @@
-namespace lim {
-
     public class IoContext
     {
         public LimObject target;
@@ -97,6 +95,8 @@ namespace lim {
 		public int shouldExit;
 		public int exitResult;
 
+        public static string[] args;
+
         public LimSeq IOSYMBOL(string name)
         {
             return LimSeq.createSymbolInMachine(this, name);
@@ -118,11 +118,13 @@ namespace lim {
         }
 
 
-		public LimState()
+		public LimState(string [] args)
 		{
 			objectProto = LimObject.createProto(this);
 			core = objectProto.clone(this);
 			lobby = objectProto.clone(this);
+
+            LimState.args = args;
 
             LimSeq seqProto = LimSeq.createProto(this);
 
@@ -310,4 +312,3 @@ namespace lim {
         MESSAGE_STOP_STATUS_RETURN = 4,
         MESSAGE_STOP_STATUS_EOL = 8
     }
-}

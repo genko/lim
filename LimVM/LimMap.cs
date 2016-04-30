@@ -1,8 +1,6 @@
 
 using System.Collections;
 
-namespace lim {
-
 	public class LimMap : LimObject
     {
 		public override string name { get { return "Map"; } }
@@ -140,5 +138,3 @@ namespace lim {
 		}
 
 	}
-
-}

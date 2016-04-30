@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 
-namespace lim {
-
 	public class LimMessage : LimObject
     {
         public bool async = false;
@@ -594,5 +592,3 @@ namespace lim {
 		}
 
     }
-
-}

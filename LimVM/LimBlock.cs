@@ -1,5 +1,3 @@
-namespace lim
-{
    public class LimBlock : LimObject
    {
       public bool async = false;
@@ -164,4 +162,3 @@ namespace lim
       }
 
    }
-}

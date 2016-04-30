@@ -1,5 +1,3 @@
-namespace lim
-{
    public delegate LimObject LimMethodFunc(LimObject target, LimObject locals, LimObject message);
 
    public class LimCFunction : LimObject
@@ -69,4 +67,3 @@ namespace lim
          return func(target, locals, m);
       }
    }
-}

@@ -1,8 +1,6 @@
 
 using System;
 
-namespace lim {
-
     public class LimConsole : LimObject
     {
       public override string name { get { return "Console"; } }
@@ -55,4 +53,3 @@ namespace lim {
         }
 
     }
-}

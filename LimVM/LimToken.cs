@@ -1,5 +1,3 @@
-namespace lim {
-
    public enum LimTokenType {
       NO_TOKEN = 0,
       OPENPAREN_TOKEN,
@@ -74,4 +72,3 @@ namespace lim {
       public void printSelf() { System.Console.Write("'" + name + "'"); }
 
    }
-}

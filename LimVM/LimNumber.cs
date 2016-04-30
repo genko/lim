@@ -1,7 +1,5 @@
 using System;
 
-namespace lim {
-
     public class LimNumber : LimObject
     {
  		public override string name { get { return "Number"; } }
@@ -263,4 +261,3 @@ namespace lim {
         }
 
     }
-}

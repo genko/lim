@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>lim.LimCLI</StartupObject>
+    <StartupObject>LimCLI</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

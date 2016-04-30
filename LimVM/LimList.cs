@@ -1,7 +1,5 @@
 using System;
 
-namespace lim {
-
 	public class LimList : LimObject
     {
 		public override string name { get { return "List"; } }
@@ -23,7 +21,6 @@ namespace lim {
 		{
 			LimList pro = new LimList();
             pro.state = state;
-         //   pro.tag.cloneFunc = new IoTagCloneFunc(pro.clone);
             pro.createSlots();
             pro.createProtos();
             pro.list = new LimObjectArrayList();
@@ -67,7 +64,6 @@ namespace lim {
         }
 
         // Published Slots
-
         public static LimObject slotIndexOf(LimObject target, LimObject locals, LimObject m)
 		{
 			LimList o = target as LimList;
@@ -195,19 +191,6 @@ namespace lim {
             }
         }
 
-        /*
-                public static LimObject slotAtInsert(LimObject target, LimObject locals, LimObject message)
-                {
-                }
-
-                public static LimObject slotAtPut(LimObject target, LimObject locals, LimObject message)
-                {
-                }
-
-                public static LimObject slotAtIfAbsentPut(LimObject target, LimObject locals, LimObject message)
-                {
-                }
-        */
         public static LimObject slotContains(LimObject target, LimObject locals, LimObject message)
 		{
             return null; // TODO: return IoBool
@@ -245,4 +228,3 @@ namespace lim {
 			return uniqueId.ToString();
 		}
 	}
-}

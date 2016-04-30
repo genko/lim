@@ -1,5 +1,3 @@
-namespace lim
-{
     public class LimSeq : LimObject
     {
         public override string name { get { return "Sequence"; } }
@@ -177,4 +175,3 @@ namespace lim
             return LimSeq.createObject(s.state, str);
         }
     }
-}

@@ -1,4 +1,3 @@
-namespace lim {
 
     public class LimSystem : LimObject
     {
@@ -42,11 +41,10 @@ namespace lim {
         {
            LimSystem o = target as LimSystem;
            LimList l = LimList.createObject(o.state);
-           for (int i = 0; i < LimCLI.m_args.Length; i++)
+           for (int i = 0; i < LimState.args.Length; i++)
            {
-              l.append(LimSeq.createObject(o.state, LimCLI.m_args[i]));
+              l.append(LimSeq.createObject(o.state, LimState.args[i]));
            }
            return l;
         }
     }
-}

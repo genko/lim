@@ -1,5 +1,3 @@
-namespace lim {
-
     public enum LimCallStatus
     {
         MESSAGE_STOP_STATUS_NORMAL = 0,
@@ -66,7 +64,6 @@ namespace lim {
 
         public static LimObject slotCallMessage(LimObject target, LimObject locals, LimObject message)
         {
-            // setSlot("A", Object clone do(setSlot("B", method(call message))))
             LimCall self = target as LimCall;
             return self.msg;
         }
@@ -85,4 +82,3 @@ namespace lim {
             return call;
         }
     }
-}
