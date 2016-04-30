@@ -1,8 +1,3 @@
-
-using System;
-using System.Collections;
-using System.IO;
-
 namespace lim {
 
     public class IoContext
@@ -15,17 +10,16 @@ namespace lim {
 
     public class LimState {
 
-        public ArrayList contextList = new ArrayList();
+        public System.Collections.ArrayList contextList = new System.Collections.ArrayList();
 
-		public Hashtable primitives = new Hashtable(); // keys are raw strings
-        public Hashtable symbols = new Hashtable(); // keys are raw strings
+		public System.Collections.Hashtable primitives = new System.Collections.Hashtable(); // keys are raw strings
+        public System.Collections.Hashtable symbols = new System.Collections.Hashtable(); // keys are raw strings
 
 		// coroutines
 		public LimObject objectProto;
         // public IoCoroutine mainCoroutine;    // the object that represents the main "thread"
         // public IoCoroutine currentCoroutine; // the object whose coroutine is active
-		public Stack currentIoStack;      // quick access to current coro's retain stack
-        public LimClr clrProto;
+		public System.Collections.Stack currentIoStack;      // quick access to current coro's retain stack
 
 		// quick access objects
 		public LimSeq activateSymbol;
@@ -151,9 +145,6 @@ namespace lim {
             LimBlock blockProto = LimBlock.createProto(this);
             LimCall callProto = LimCall.createProto(this);
             LimList listProto = LimList.createProto(this);
-            clrProto = LimClr.createProto(this);
-            LimClrAssembly asmProto = LimClrAssembly.createProto(this);
-            LimClrObject clrObjProto = LimClrObject.createProto(this);
 
             LimObject protos = objectProto.clone(this);
 			protos.slots["Core"] = core;
@@ -174,9 +165,6 @@ namespace lim {
             core.slots["Locals"] = localsProto = objectProto.localsProto(this);
             core.slots["List"] = listProto;
             core.slots["Sequence"] = seqProto;
-            core.slots["CLR"] = clrProto;
-            core.slots["CLRAssembly"] = asmProto;
-            core.slots["CLRObject"] = clrObjProto;
 			
 			objectProto.protos.Add(lobby);
             lobby.protos.Add(protos);
@@ -270,7 +258,7 @@ namespace lim {
 
         public LimObject loadFile(string fileName)
         {
-            StreamReader sr = new StreamReader(fileName);
+            System.IO.StreamReader sr = new System.IO.StreamReader(fileName);
 			LimObject result = null;
 			string s = sr.ReadToEnd();
 				result = onDoCStringWithLabel(lobby, s, fileName);
@@ -281,7 +269,7 @@ namespace lim {
         {
             LimObject result = null;
             result = onDoCStringWithLabel(lobby, LimBootstrap.bootstrap, "bootstrap");
-            Console.WriteLine("Bootstrap successfully loaded.");
+            System.Console.WriteLine("Bootstrap successfully loaded.");
             return result;
         }
 
@@ -299,15 +287,15 @@ namespace lim {
 		   //return;
             while (true)
             {
-                Console.Write("Io> ");
-                string s = Console.ReadLine();
+                System.Console.Write("Io> ");
+                string s = System.Console.ReadLine();
                 if (s.Equals("quit") || s.Equals("exit")) break;
                 result = onDoCStringWithLabel(lobby, s, "prompt:");
-                Console.Write("==> ");
+                System.Console.Write("==> ");
                 if (result != null)
                     result.print();
-                else Console.WriteLine("why null?");
-                Console.WriteLine();
+                else System.Console.WriteLine("why null?");
+                System.Console.WriteLine();
 
             }
 		}

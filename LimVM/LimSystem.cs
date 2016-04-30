@@ -1,9 +1,3 @@
-
-using System.Collections;
-using System;
-using System.Globalization;
-using System.IO;
-
 namespace lim {
 
     public class LimSystem : LimObject
@@ -36,12 +30,12 @@ namespace lim {
 
       public override int GetHashCode()
       {
-         return Convert.ToInt32(uniqueIdCounter);
+         return System.Convert.ToInt32(uniqueIdCounter);
       }
 
         public override void print()
         {
-            Console.Write("{0}", this.ToString());
+            System.Console.Write("{0}", this.ToString());
         }
 
         public static LimList args(LimObject target, LimObject locals, LimObject message)

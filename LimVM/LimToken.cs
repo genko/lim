@@ -1,5 +1,3 @@
-using System;
-
 namespace lim {
 
    public enum LimTokenType {
@@ -31,7 +29,7 @@ namespace lim {
       public LimToken nextToken { 
          set { 
             if (this == value) 
-               throw new Exception("next = self!");
+               throw new System.Exception("next = self!");
             nextToken_ = value;
          } 
          get { return nextToken_; }

@@ -1,9 +1,6 @@
 
 using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace lim {
 
@@ -508,7 +505,7 @@ namespace lim {
                         );
 					break;
 				case LimTokenType.NUMBER_TOKEN:
-					r = LimNumber.newWithDouble(this.state, Convert.ToDouble(method.value, CultureInfo.InvariantCulture));
+					r = LimNumber.newWithDouble(this.state, Convert.ToDouble(method.value));
 					break;
                 default:
                     if (method.value.Equals("nil"))

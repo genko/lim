@@ -1,5 +1,3 @@
-using System;
-
 namespace lim
 {
 	public static class LimCLI

@@ -1,8 +1,3 @@
-
-using System;
-using System.Text;
-using System.Collections;
-
 namespace lim
 {
    public class LimBlock : LimObject

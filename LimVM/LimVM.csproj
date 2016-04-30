@@ -63,10 +63,6 @@
     <Compile Include="LimBootstrap.cs" />
     <Compile Include="LimCall.cs" />
     <Compile Include="LimCFunction.cs" />
-    <Compile Include="LimCLR.cs" />
-    <Compile Include="LimCLRAssembly.cs" />
-    <Compile Include="LimCLRFunction.cs" />
-    <Compile Include="LimCLRObject.cs" />
     <Compile Include="LimSystem.cs" />
     <Compile Include="LimLexer.cs" />
     <Compile Include="LimList.cs">

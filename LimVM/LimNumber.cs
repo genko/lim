@@ -1,6 +1,4 @@
-using System.Collections;
 using System;
-using System.Globalization;
 
 namespace lim {
 
@@ -76,9 +74,9 @@ namespace lim {
 
             if (Double.Equals(n, 0) ||
                 (!Double.IsInfinity(n) && !Double.IsNaN(n) &&
-                !n.ToString(CultureInfo.InvariantCulture).Contains(".") &&
-                !n.ToString(CultureInfo.InvariantCulture).Contains("E") &&
-                !n.ToString(CultureInfo.InvariantCulture).Contains("e")
+                !n.ToString().Contains(".") &&
+                !n.ToString().Contains("E") &&
+                !n.ToString().Contains("e")
                 )
             )
             {
@@ -102,8 +100,8 @@ namespace lim {
 
 		public override string ToString()
 		{
-			return isInteger ? longValue.ToString(CultureInfo.InvariantCulture)
-                : doubleValue.ToString("G",CultureInfo.InvariantCulture);
+			return isInteger ? longValue.ToString()
+                : doubleValue.ToString("G");
 		}
 
         public override int compare(LimObject v)
@@ -196,20 +194,14 @@ namespace lim {
 
         public static LimObject slotLog10(LimObject target, LimObject locals, LimObject message)
         {
-           // LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;
             return LimNumber.newWithDouble(target.state,
                 Math.Log10(self.isInteger ? self.longValue : self.doubleValue)
                 );
         }
 
-        // setSlot("A", 32.45 + (20*(5836 log10)) + (20*(8.5 log10)))
-        // !link-budget 22 0 13 126.3606841787141377 8 0
-
-
         public static LimObject slotLog2(LimObject target, LimObject locals, LimObject message)
         {
-           // LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;
             return LimNumber.newWithDouble(target.state,
                 Math.Log(self.isInteger ? self.longValue : self.doubleValue, 2)

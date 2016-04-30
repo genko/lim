@@ -618,7 +618,6 @@ done:
         }
 
         // Object Public Raw Methods
-        
         public LimObject initClone(LimObject target, LimObject locals, LimMessage m, LimObject newObject)
         {
             LimObject context = null;
@@ -630,8 +629,6 @@ done:
 
         public void addTaglessMethodTable(LimState state, LimCFunction[] table)
         {
-            //foreach (IoMethodTableEntry entry in table)
-            //    slots[entry.name] = new LimCFunction(state, entry.name, entry.func);
             foreach (LimCFunction entry in table)
             {
                 entry.state = state;
@@ -644,10 +641,7 @@ done:
             LimMessage m = message as LimMessage;
             LimObject context = null;
             LimObject forwardSlot = target.rawGetSlotContext(target.state.forwardMessage.messageName, out context);
-            
-            //if (forwardSlot != null)
-            //    return forwardSlot.activate(forwardSlot, locals, m, context);
-
+           
             Console.WriteLine("'{0}' does not respond to message '{1}'",
                 target.name, m.messageName.ToString());
             return target;
@@ -656,13 +650,10 @@ done:
        public LimObject perform(LimObject target, LimObject locals, LimObject message)
        {
          LimMessage msg = message as LimMessage;
-            LimObject context = null;
-            LimObject slotValue = target.rawGetSlotContext(msg.messageName, out context);
-            
-            if (slotValue == null)
-                slotValue = target.clrGetSlot(msg);
-         
-            if (slotValue != null)
+         LimObject context = null;
+         LimObject slotValue = target.rawGetSlotContext(msg.messageName, out context);
+
+         if (slotValue != null)
          {
                 return slotValue.activate(slotValue, target, locals, msg, context);
          }
@@ -675,7 +666,6 @@ done:
 
         public LimObject localsProto(LimState state)
         {
-            
             LimObject obj = LimObject.createObject(state);
             LimObject firstProto = obj.protos[0] as LimObject;
             foreach (object key in firstProto.slots.Keys)
@@ -689,7 +679,6 @@ done:
             return obj;
         }
 
-      
         public virtual LimObject activate(LimObject self, LimObject target, LimObject locals, LimMessage m, LimObject slotContext)
         {
          return self.isActivatable ? self.activate(self, target, locals, m) : self;
@@ -703,12 +692,11 @@ done:
                 LimObject slotValue = self.rawGetSlotContext(self.state.activateMessage.messageName, out context);
                 if (slotValue != null)
                 {
-               // ?? мы шо в цикле ???
-               return activate(slotValue, target, locals, m, context); 
+                    return activate(slotValue, target, locals, m, context); 
                 }
-            return state.LimNil;
-            } else
-            return self;
+                return state.LimNil;
+            }
+            else return self;
         }
 
         public void createSlots()
@@ -734,18 +722,6 @@ done:
         {
             LimObject context = null;
             LimObject v = rawGetSlotContext(slot, out context);
-            return v;
-        }
-
-        public LimObject clrGetSlot(LimMessage message)
-        {
-            LimObject v = null;
-            if (this is LimClrObject)
-            {
-                v = (this as LimClrObject).getMethod(message);
-            }
-            if (v == null)
-                v = this.state.clrProto.getType(this.state, message.messageName.value);
             return v;
         }
 
@@ -782,10 +758,6 @@ done:
 
       public virtual void print()
       {
-            //LimSeq type = this.slots["type"] as LimSeq;
-         //if (type == null)
-         //		type = (this.rawGetSlot(state.typeMessage.messageName) as LimCFunction).func(this, this, this) as LimSeq;
-            //string printedName = type == null ? ToString() : type.value;
          Console.Write(this);
       }
 

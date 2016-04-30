@@ -1,13 +1,9 @@
-using System;
-using System.Text;
-using System.Diagnostics;
-
 namespace lim
 {
     public class LimSeq : LimObject
     {
         public override string name { get { return "Sequence"; } }
-        public string value = String.Empty;
+        public string value = System.String.Empty;
 
         public char[] asCharArray { get { return value.ToCharArray(); } }
 
@@ -93,7 +89,7 @@ namespace lim
             LimSeq o = target as LimSeq;
             LimSeq res = LimSeq.createObject(target.state);
             char[] A = o.asCharArray;
-            Array.Reverse(A);
+            System.Array.Reverse(A);
             res.value = new string(A);
             return res;
         }
@@ -126,7 +122,7 @@ namespace lim
 
         public override void print()
         {
-            Console.Write("{0}", value);
+            System.Console.Write("{0}", value);
         }
 
         public override string ToString()

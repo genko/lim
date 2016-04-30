@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace lim
 {
    public delegate LimObject LimMethodFunc(LimObject target, LimObject locals, LimObject message);

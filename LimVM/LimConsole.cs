@@ -1,8 +1,5 @@
 
-using System.Collections;
 using System;
-using System.Globalization;
-using System.IO;
 
 namespace lim {
 
