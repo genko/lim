@@ -13,7 +13,7 @@ namespace lim {
         public LimObject slotContext;
     }
 
-	public class LimState {
+    public class LimState {
 
         public ArrayList contextList = new ArrayList();
 
@@ -22,8 +22,8 @@ namespace lim {
 
 		// coroutines
 		public LimObject objectProto;
-       // public IoCoroutine mainCoroutine;    // the object that represents the main "thread"
-       // public IoCoroutine currentCoroutine; // the object whose coroutine is active
+        // public IoCoroutine mainCoroutine;    // the object that represents the main "thread"
+        // public IoCoroutine currentCoroutine; // the object whose coroutine is active
 		public Stack currentIoStack;      // quick access to current coro's retain stack
         public LimClr clrProto;
 
@@ -123,10 +123,9 @@ namespace lim {
         {
         }
 
+
 		public LimState()
 		{
-            
-
 			objectProto = LimObject.createProto(this);
 			core = objectProto.clone(this);
 			lobby = objectProto.clone(this);
@@ -146,13 +145,10 @@ namespace lim {
 
             LimMap mapProto = LimMap.createProto(this);
 			LimNumber numProto = LimNumber.createProto(this);
-		   LimConsole consProto = LimConsole.createProto(this);
-         LimSystem sysProto = LimSystem.createProto(this);
+		    LimConsole consProto = LimConsole.createProto(this);
+            LimSystem sysProto = LimSystem.createProto(this);
 			LimCFunction cfProto = LimCFunction.createProto(this);
             LimBlock blockProto = LimBlock.createProto(this);
-            //IoCoroutine coroProto = IoCoroutine.createProto(this);
-            //mainCoroutine = coroProto;
-            //currentCoroutine = coroProto;
             LimCall callProto = LimCall.createProto(this);
             LimList listProto = LimList.createProto(this);
             clrProto = LimClr.createProto(this);
@@ -168,12 +164,11 @@ namespace lim {
 
 			core.slots["Object"] = objectProto;
 			core.slots["Map"] = mapProto;
-           // core.slots["Coroutine"] = coroProto;
 			core.slots["Message"] = messageProto;
 			core.slots["CFunction"] = cfProto;
 			core.slots["Number"] = numProto;
-		   core.slots["Console"] = consProto;
-		   core.slots["System"] = sysProto;
+		    core.slots["Console"] = consProto;
+		    core.slots["System"] = sysProto;
             core.slots["Block"] = blockProto;
             core.slots["Call"] = callProto;
             core.slots["Locals"] = localsProto = objectProto.localsProto(this);
@@ -197,8 +192,6 @@ namespace lim {
             mainMessage = LimMessage.newWithName(this, IOSYMBOL("main"));
 			typeMessage = LimMessage.newWithName(this, IOSYMBOL("type"));
 		}
-
-      
 
         public void Return(LimObject v)
         {
@@ -286,38 +279,24 @@ namespace lim {
 
         public LimObject processBootstrap()
         {
-            //string[] ios = null;
-            //try
-            //{
-            //    ios = Directory.GetFiles("../io/bootstrap");
-            // }
-            //catch {
-            //}
-            //if (ios == null || ios.Length == 0)
-            //{
-            //    Console.WriteLine("Bootstrap not found. Processing raw Io.");
-            //    return null;
-            //}
-            //else
-            //    Console.WriteLine("Bootstrap successfully loaded.");
-            //ArrayList iosa = new ArrayList(ios);
-            //iosa.Sort();
             LimObject result = null;
             result = onDoCStringWithLabel(lobby, LimBootstrap.bootstrap, "bootstrap");
-            //foreach (string s in iosa)
-            //{
-            //    result = loadFile(s);
-            //}
+            Console.WriteLine("Bootstrap successfully loaded.");
             return result;
         }
 
-		public void prompt(LimState state)
+
+        /// <summary>
+        /// Command line prompt, interpreted stuff is added to specified state
+        /// </summary>
+        /// <param name="state">State object of the language</param>
+        public void prompt(LimState state)
 		{
 			LimObject result = null;
             processBootstrap();
 		   //onDoCStringWithLabel(lobby, "\"Geben Sie einen Namen ein: \" print\n\rblub := Console readLine", "propmt");
-         //onDoCStringWithLabel(lobby, "\"Hallo, \" print\n\rblub print\n\r\"!\" println", "prompt:");
-		   //   return;
+           //onDoCStringWithLabel(lobby, "\"Hallo, \" print\n\rblub print\n\r\"!\" println", "prompt:");
+		   //return;
             while (true)
             {
                 Console.Write("Io> ");

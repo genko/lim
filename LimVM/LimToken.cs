@@ -48,7 +48,7 @@ namespace lim {
             case LimTokenType.TRIQUOTE_TOKEN:	return "TriQuote";
             case LimTokenType.IDENTIFIER_TOKEN:	return "Identifier";
             case LimTokenType.TERMINATOR_TOKEN:	return "Terminator";
-            case LimTokenType.COMMENT_TOKEN:		return "Comment";
+            case LimTokenType.COMMENT_TOKEN:	return "Comment";
             case LimTokenType.NUMBER_TOKEN:		return "Number";
             case LimTokenType.HEXNUMBER_TOKEN:	return "HexNumber";
          }
