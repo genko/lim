@@ -87,7 +87,7 @@ namespace lim {
                     num.longValue = Convert.ToInt32(n);
                     num.isInteger = true;
                 }
-                catch (OverflowException oe)
+                catch (OverflowException)
                 {
 
                 }
@@ -164,7 +164,7 @@ namespace lim {
                     );
         }
 
-        public static LimObject slotSubstract(LimObject target, LimObject locals, LimObject message)
+        public new static LimObject slotSubstract(LimObject target, LimObject locals, LimObject message)
         {
             LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
             LimNumber self = target as LimNumber;

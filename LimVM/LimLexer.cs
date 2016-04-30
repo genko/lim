@@ -200,7 +200,7 @@ namespace lim {
 
 			if (t.charNumber < 0)
 			{
-				System.Console.WriteLine("bad t->charNumber = %i\n", t.charNumber);
+				Console.WriteLine("bad t->charNumber = %i\n", t.charNumber);
 			}
 
 			t.name = s1;

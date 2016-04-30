@@ -715,10 +715,6 @@ done:
         {
             if (slots == null)
                 slots = new LimSeqObjectHashtable(state);
-         if (state == null)
-         {
-            int x = 0;
-         }
         }
 
         public void createProtos()

@@ -100,7 +100,7 @@ namespace lim
 
             asm = LimClrAssembly.createObject(target.state);
 
-            asm.assembly = Assembly.LoadWithPartialName(assemblyName.value);
+            asm.assembly = Assembly.Load(assemblyName.value);
             if (asm.assembly == null) return self;
 
             self.loadedAssemblies[assemblyName.value] = asm;
@@ -111,10 +111,6 @@ namespace lim
             {
                 string theNameSpace = t.FullName.LastIndexOf(".") == -1 ? "-" : t.FullName.Substring(0, t.FullName.LastIndexOf("."));
                 string theClass = t.FullName.LastIndexOf(".") == -1 ? t.FullName : t.FullName.Substring(t.FullName.LastIndexOf(".") + 1);
-                if (theClass.Equals("Form"))
-                {
-                    int i = 0;
-                }
                 if (asm.assemblyNamespaces.ContainsKey(theNameSpace))
                 {
                     Hashtable a = asm.assemblyNamespaces[theNameSpace] as Hashtable;
