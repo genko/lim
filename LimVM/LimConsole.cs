@@ -1,6 +1,3 @@
-
-using System;
-
 public class LimConsole : LimObject
 {
     public override string getName() { return "Console"; }
@@ -32,24 +29,24 @@ public class LimConsole : LimObject
 
     public override int GetHashCode()
     {
-        return Convert.ToInt32(uniqueIdCounter);
+        return System.Convert.ToInt32(uniqueIdCounter);
     }
 
     public override void print()
     {
-        Console.Write("{0}", this.ToString());
+        System.Console.Write("{0}", this.ToString());
     }
 
     public static LimSeq readLine(LimObject target, LimObject locals, LimObject message)
     {
         LimConsole o = target as LimConsole;
-        return LimSeq.createObject(o.getState(), Console.ReadLine());
+        return LimSeq.createObject(o.getState(), System.Console.ReadLine());
     }
 
     public static LimSeq readKey(LimObject target, LimObject locals, LimObject message)
     {
         LimConsole o = target as LimConsole;
-        return LimSeq.createObject(o.getState(), Console.ReadKey().KeyChar.ToString());
+        return LimSeq.createObject(o.getState(), System.Console.ReadKey().KeyChar.ToString());
     }
 
 }

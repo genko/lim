@@ -1,10 +1,5 @@
-
-using System;
-using System.Collections;
-
 public class LimMessage : LimObject
 {
-    public bool async = false;
     public override string getName() { return "Message"; }
     public LimSeq messageName;
     public LimObjectArrayList args;
@@ -110,7 +105,7 @@ public class LimMessage : LimObject
         }
         else
         {
-            Console.WriteLine("argument must be Message or Nil");
+            System.Console.WriteLine("argument must be Message or Nil");
         }
         self.next = mmm;
         return self;
@@ -147,7 +142,7 @@ public class LimMessage : LimObject
     public static LimObject slotArgCount(LimObject target, LimObject locals, LimObject message)
     {
         LimMessage self = target as LimMessage;
-        return LimNumber.newWithDouble(target.getState(), Convert.ToDouble(self.args.Count));
+        return LimNumber.newWithDouble(target.getState(), System.Convert.ToDouble(self.args.Count));
     }
 
     public static LimObject slotArgAt(LimObject target, LimObject locals, LimObject message)
@@ -261,14 +256,11 @@ public class LimMessage : LimObject
                 result = msg.cachedResult;
                 if (result == null)
                 {
-                    //if (target.tag.performFunc == null)
                     result = target.perform(target, locals, msg);
-                    //else
-                    //    result = target.tag.performFunc(target, locals, msg);
                 }
                 if (result == null)
                 {
-                    Console.WriteLine("Message chains intermediate mustn't be null");
+                    System.Console.WriteLine("Message chains intermediate mustn't be null");
                 }
                 target = result;
             }
@@ -284,8 +276,7 @@ public class LimMessage : LimObject
     public override void print()
     {
         string code = this.descriptionToFollow(true);
-        Console.Write(code);
-        //Console.Write(ToString());
+        System.Console.Write(code);
     }
 
     public LimMessage rawArgAt(int p)
@@ -297,7 +288,6 @@ public class LimMessage : LimObject
     public LimObject localsValueArgAt(LimObject locals, int i)
     {
         LimMessage m = i < args.Count ? args[i] as LimMessage : null;
-        //m.async = async;
         if (m != null)
         {
             if (m.cachedResult != null && m.next == null)
@@ -309,8 +299,6 @@ public class LimMessage : LimObject
         }
         return this.getState().LimNil;
     }
-
-    // TODO: possible folding of following functions
 
     public LimSeq localsSymbolArgAt(LimObject locals, int i)
     {
@@ -350,7 +338,7 @@ public class LimMessage : LimObject
     void localsNumberArgAtErrorForType(LimObject locals, int i, string p)
     {
         LimObject v = localsValueArgAt(locals, i);
-        Console.WriteLine("argument {0} to method '{1}' must be a {2}, not a '{3}'",
+        System.Console.WriteLine("argument {0} to method '{1}' must be a {2}, not a '{3}'",
             i, this.messageName, p, v.getName());
     }
 
@@ -449,7 +437,7 @@ public class LimMessage : LimObject
                     );
                 break;
             case LimTokenType.NUMBER_TOKEN:
-                r = LimNumber.newWithDouble(this.getState(), Convert.ToDouble(method.value));
+                r = LimNumber.newWithDouble(this.getState(), System.Convert.ToDouble(method.value));
                 break;
             default:
                 if (method.value.Equals("nil"))

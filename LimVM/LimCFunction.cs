@@ -2,7 +2,6 @@ public delegate LimObject LimMethodFunc(LimObject target, LimObject locals, LimO
 
 public class LimCFunction : LimObject
 {
-    public bool async = false;
     public override string getName() { return "CFunction"; }
     public LimMethodFunc func;
     public string funcName;
@@ -20,7 +19,16 @@ public class LimCFunction : LimObject
         return cf.proto(state).clone(state) as LimCFunction;
     }
 
-    public LimCFunction(string name, LimMethodFunc func) : this(null, name, func) { }
+    public LimCFunction(string name, LimMethodFunc func)
+    {
+        isActivatable = true;
+        this.setState(null);
+        createSlots();
+        createProtos();
+        uniqueId = 0;
+        funcName = name;
+        this.func = func;
+    }
 
     public LimCFunction(LimState state, string name, LimMethodFunc func)
     {

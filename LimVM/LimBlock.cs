@@ -1,6 +1,5 @@
 public class LimBlock : LimObject
 {
-    public bool async = false;
     public override string getName() { return "Block"; }
     public LimMessage containedMessage;
     public LimObjectArrayList argNames;

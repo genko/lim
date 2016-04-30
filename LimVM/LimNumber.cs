@@ -1,5 +1,3 @@
-using System;
-
 public class LimNumber : LimObject
 {
     public override string getName() { return "Number"; }
@@ -67,8 +65,8 @@ public class LimNumber : LimObject
         num.isInteger = false;
         num.doubleValue = n;
 
-        if (Double.Equals(n, 0) ||
-            (!Double.IsInfinity(n) && !Double.IsNaN(n) &&
+        if (System.Double.Equals(n, 0) ||
+            (!System.Double.IsInfinity(n) && !System.Double.IsNaN(n) &&
             !n.ToString().Contains(".") &&
             !n.ToString().Contains("E") &&
             !n.ToString().Contains("e")
@@ -77,10 +75,10 @@ public class LimNumber : LimObject
         {
             try
             {
-                num.longValue = Convert.ToInt32(n);
+                num.longValue = System.Convert.ToInt32(n);
                 num.isInteger = true;
             }
-            catch (OverflowException)
+            catch (System.OverflowException)
             {
 
             }
@@ -90,7 +88,7 @@ public class LimNumber : LimObject
 
     public override int GetHashCode()
     {
-        return Convert.ToInt32(uniqueIdCounter);
+        return System.Convert.ToInt32(uniqueIdCounter);
     }
 
     public override string ToString()
@@ -104,7 +102,7 @@ public class LimNumber : LimObject
         LimNumber o = this as LimNumber;
         if (v is LimNumber)
         {
-            if (Convert.ToDouble((v as LimNumber).getValue()) == Convert.ToDouble(o.getValue()))
+            if (System.Convert.ToDouble((v as LimNumber).getValue()) == System.Convert.ToDouble(o.getValue()))
             {
                 return 0;
             }
@@ -118,27 +116,27 @@ public class LimNumber : LimObject
 
     public long asLong()
     {
-        return Convert.ToInt64(getValue());
+        return System.Convert.ToInt64(getValue());
     }
 
     public int asInt()
     {
-        return Convert.ToInt32(getValue());
+        return System.Convert.ToInt32(getValue());
     }
 
     public float asFloat()
     {
-        return Convert.ToSingle(getValue());
+        return System.Convert.ToSingle(getValue());
     }
 
     public double asDouble()
     {
-        return Convert.ToDouble(getValue());
+        return System.Convert.ToDouble(getValue());
     }
 
     public override void print()
     {
-        Console.Write("{0}", this.ToString());
+        System.Console.Write("{0}", this.ToString());
     }
 
     public static LimObject slotAsNumber(LimObject target, LimObject locals, LimObject message)
@@ -191,7 +189,7 @@ public class LimNumber : LimObject
     {
         LimNumber self = target as LimNumber;
         return LimNumber.newWithDouble(target.getState(),
-            Math.Log10(self.isInteger ? self.longValue : self.doubleValue)
+            System.Math.Log10(self.isInteger ? self.longValue : self.doubleValue)
             );
     }
 
@@ -199,26 +197,26 @@ public class LimNumber : LimObject
     {
         LimNumber self = target as LimNumber;
         return LimNumber.newWithDouble(target.getState(),
-            Math.Log(self.isInteger ? self.longValue : self.doubleValue, 2)
+            System.Math.Log(self.isInteger ? self.longValue : self.doubleValue, 2)
             );
     }
 
     public static LimObject slotPi(LimObject target, LimObject locals, LimObject message)
     {
         LimNumber self = target as LimNumber;
-        return LimNumber.newWithDouble(target.getState(), Math.PI);
+        return LimNumber.newWithDouble(target.getState(), System.Math.PI);
     }
 
     public static LimObject slotMinPositive(LimObject target, LimObject locals, LimObject message)
     {
         LimNumber self = target as LimNumber;
-        return LimNumber.newWithDouble(target.getState(), Double.Epsilon);
+        return LimNumber.newWithDouble(target.getState(), System.Double.Epsilon);
     }
 
     public static LimObject slotE(LimObject target, LimObject locals, LimObject message)
     {
         LimNumber self = target as LimNumber;
-        return LimNumber.newWithDouble(target.getState(), Math.E);
+        return LimNumber.newWithDouble(target.getState(), System.Math.E);
     }
 
     public static LimObject slotLog(LimObject target, LimObject locals, LimObject message)
@@ -226,7 +224,7 @@ public class LimNumber : LimObject
         LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
         LimNumber self = target as LimNumber;
         return LimNumber.newWithDouble(target.getState(),
-            Math.Log(self.isInteger ? self.longValue : self.doubleValue,
+            System.Math.Log(self.isInteger ? self.longValue : self.doubleValue,
             other.isInteger ? other.longValue : other.doubleValue)
             );
     }
@@ -236,7 +234,7 @@ public class LimNumber : LimObject
         LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
         LimNumber self = target as LimNumber;
         return LimNumber.newWithDouble(target.getState(),
-            Math.Pow(self.isInteger ? self.longValue : self.doubleValue,
+            System.Math.Pow(self.isInteger ? self.longValue : self.doubleValue,
             other.isInteger ? other.longValue : other.doubleValue)
             );
     }
@@ -245,7 +243,7 @@ public class LimNumber : LimObject
     {
         LimNumber self = target as LimNumber;
         return LimNumber.newWithDouble(target.getState(),
-            Math.Exp(self.isInteger ? self.longValue : self.doubleValue)
+            System.Math.Exp(self.isInteger ? self.longValue : self.doubleValue)
             );
     }
 
@@ -253,7 +251,7 @@ public class LimNumber : LimObject
     {
         LimNumber self = target as LimNumber;
         return LimNumber.newWithDouble(target.getState(),
-            Math.Round(self.isInteger ? self.longValue : self.doubleValue)
+            System.Math.Round(self.isInteger ? self.longValue : self.doubleValue)
             );
     }
 

@@ -1,8 +1,4 @@
-
-using System;
 using System.Collections;
-
-// DEBUG HELPER
 
 public class LimObjectArrayList : ArrayList
 {
@@ -105,7 +101,7 @@ public class LimObject
     public virtual LimObject clone(LimState state)
     {
         LimObject proto = state.protoWithInitFunc(getName());
-        LimObject o = Activator.CreateInstance(this.GetType()) as LimObject;//typeof(this)new LimObject();
+        LimObject o = System.Activator.CreateInstance(this.GetType()) as LimObject;//typeof(this)new LimObject();
         uniqueIdCounter++;
         o.uniqueId = uniqueIdCounter;
         o.setState(proto.getState());
@@ -174,7 +170,7 @@ public class LimObject
     {
         LimMessage m = message as LimMessage;
         LimObject o = m.localsValueArgAt(locals, 0);
-        return LimNumber.newWithDouble(self.getState(), Convert.ToDouble(self.compare(o)));
+        return LimNumber.newWithDouble(self.getState(), System.Convert.ToDouble(self.compare(o)));
     }
 
     public virtual int compare(LimObject v)
@@ -290,7 +286,7 @@ public class LimObject
     public static LimObject slotPrintln(LimObject target, LimObject locals, LimObject m)
     {
         target.print();
-        Console.WriteLine();
+        System.Console.WriteLine();
         return target;
     }
 
@@ -299,9 +295,9 @@ public class LimObject
         if (target.slots == null || target.slots.Count == 0) return target;
         foreach (object key in target.slots.Keys)
         {
-            Console.Write(key.ToString() + " ");
+            System.Console.Write(key.ToString() + " ");
         }
-        Console.WriteLine();
+        System.Console.WriteLine();
         return target;
     }
 
@@ -387,7 +383,7 @@ public class LimObject
         }
         else
         {
-            Console.WriteLine("Slot {0} not found. Must define slot using := operator before updating.", slotName.value);
+            System.Console.WriteLine("Slot {0} not found. Must define slot using := operator before updating.", slotName.value);
         }
 
         return slotValue;
@@ -461,7 +457,7 @@ public class LimObject
         return LimNumber.newWithDouble(state, state.contextList.Count);
     }
 
-    public class EvaluateArgsEventArgs : EventArgs
+    public class EvaluateArgsEventArgs : System.EventArgs
     {
         public int Position = 0;
         public EvaluateArgsEventArgs(int pos) { Position = pos; }
@@ -476,14 +472,11 @@ public class LimObject
         LimObject result = target.getState().LimNil;
         while (true)
         {
-            bool sasync = m.async;
-            m.async = false;
             LimObject cond = m.localsValueArgAt(locals, 0);
             if (cond == target.getState().LimFalse || cond == target.getState().LimNil)
             {
                 break;
             }
-            m.async = sasync;
             result = m.localsValueArgAt(locals, 1);
             if (target.getState().handleStatus() != 0)
             {
@@ -520,7 +513,7 @@ public class LimObject
         LimObject context = null;
         LimObject forwardSlot = target.rawGetSlotContext(target.getState().forwardMessage.messageName, out context);
 
-        Console.WriteLine("'{0}' does not respond to message '{1}'",
+        System.Console.WriteLine("'{0}' does not respond to message '{1}'",
             target.getName(), m.messageName.ToString());
         return target;
     }
@@ -636,7 +629,7 @@ public class LimObject
 
     public virtual void print()
     {
-        Console.Write(this);
+        System.Console.Write(this);
     }
 
     public override string ToString()

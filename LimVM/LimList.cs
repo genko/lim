@@ -1,5 +1,3 @@
-using System;
-
 public class LimList : LimObject
 {
     public override string getName() { return "List"; }
@@ -72,7 +70,7 @@ public class LimList : LimObject
         {
             return LimNumber.newWithDouble(target.getState(), o.list.IndexOf(value));
         }
-        catch (ArgumentOutOfRangeException aoore)
+        catch (System.ArgumentOutOfRangeException aoore)
         {
             object ex = aoore;
             return target.getState().LimNil;
@@ -216,7 +214,7 @@ public class LimList : LimObject
             o.list.RemoveAt(ind.asInt());
             return target;
         }
-        catch (ArgumentOutOfRangeException aoore)
+        catch (System.ArgumentOutOfRangeException aoore)
         {
             object ex = aoore;
             return target.getState().LimNil;

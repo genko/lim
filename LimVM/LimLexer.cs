@@ -1,5 +1,3 @@
-
-using System;
 using System.Collections;
 
 public class LimLexer
@@ -26,7 +24,7 @@ public class LimLexer
         {
             first.print();
         }
-        Console.WriteLine();
+        System.Console.WriteLine();
     }
 
     public void printTokens()
@@ -35,13 +33,13 @@ public class LimLexer
         for (i = 0; i < tokenStream.Count; i++)
         {
             LimToken t = tokenStream[i] as LimToken;
-            Console.Write("'{0}' {1}", t.name, t.typeName());
+            System.Console.Write("'{0}' {1}", t.name, t.typeName());
             if (i < tokenStream.Count - 1)
             {
-                Console.Write(", ");
+                System.Console.Write(", ");
             }
         }
-        Console.WriteLine();
+        System.Console.WriteLine();
     }
 
 
@@ -79,7 +77,7 @@ public class LimLexer
 
     public int lastPos()
     {
-        return Convert.ToInt32(posStack.Peek());
+        return System.Convert.ToInt32(posStack.Peek());
     }
 
     public void pushPos()
@@ -109,8 +107,8 @@ public class LimLexer
 
     public void popPosBack()
     {
-        int i = Convert.ToInt32(tokenStack.Pop());
-        int topIndex = Convert.ToInt32(tokenStack.Peek());
+        int i = System.Convert.ToInt32(tokenStack.Pop());
+        int topIndex = System.Convert.ToInt32(tokenStack.Peek());
         if (i > -1)
         {
             if (i != topIndex)
@@ -122,7 +120,7 @@ public class LimLexer
                 }
             }
         }
-        currentPos = Convert.ToInt32(posStack.Pop());
+        currentPos = System.Convert.ToInt32(posStack.Pop());
     }
 
     public char nextChar()
@@ -177,7 +175,7 @@ public class LimLexer
 
         if (len == 0)
         {
-            throw new Exception("LimLexer fatal error: empty token\n");
+            throw new System.Exception("LimLexer fatal error: empty token\n");
         }
 
         return addTokenStringType(s1, type);
@@ -199,7 +197,7 @@ public class LimLexer
 
         if (t.charNumber < 0)
         {
-            Console.WriteLine("bad t->charNumber = %i\n", t.charNumber);
+            System.Console.WriteLine("bad t->charNumber = %i\n", t.charNumber);
         }
 
         t.name = s1;
@@ -410,7 +408,7 @@ public class LimLexer
         if (!onNULL())
         {
             char c = nextChar();
-            if (Char.ToLower(c) == Char.ToLower(ch))
+            if (System.Char.ToLower(c) == System.Char.ToLower(ch))
             {
                 return 1;
             }
@@ -449,7 +447,7 @@ public class LimLexer
 
     public int readCharacter()
     {
-        return Convert.ToInt32(readLetter() != 0 || readDigit() != 0 || readSpecialChar() != 0 || readOpChar() != 0);
+        return System.Convert.ToInt32(readLetter() != 0 || readDigit() != 0 || readSpecialChar() != 0 || readOpChar() != 0);
     }
 
     public int readOpChar()
@@ -469,7 +467,7 @@ public class LimLexer
 
     public int readLetter() // grab all symbols
     {
-        return Convert.ToInt32(readCharInRange('A', 'Z') != 0 || readCharInRange('a', 'z') != 0
+        return System.Convert.ToInt32(readCharInRange('A', 'Z') != 0 || readCharInRange('a', 'z') != 0
             || readNonASCIIChar() != 0);
         /*
         if (!onNULL())
@@ -510,7 +508,7 @@ public class LimLexer
 
     public int readQuote()
     {
-        return Convert.ToInt32(readTriQuote() != 0 || readMonoQuote() != 0);
+        return System.Convert.ToInt32(readTriQuote() != 0 || readMonoQuote() != 0);
     }
 
     public int readMonoQuote()
@@ -709,7 +707,7 @@ public class LimLexer
 
     public int readNumber()
     {
-        return Convert.ToInt32(readHexNumber() != 0 || readDecimal() != 0);
+        return System.Convert.ToInt32(readHexNumber() != 0 || readDecimal() != 0);
     }
 
     public int readExponent()
@@ -812,7 +810,7 @@ public class LimLexer
             case '{': return "curlyBrackets";
         }
 
-        throw new Exception("LimLexer: fatal error - invalid group char" + groupChar);
+        throw new System.Exception("LimLexer: fatal error - invalid group char" + groupChar);
     }
 
     public void readMessageError(string name)

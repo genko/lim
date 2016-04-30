@@ -1,4 +1,3 @@
-
 using System.Collections;
 
 public class LimMap : LimObject
