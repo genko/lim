@@ -160,7 +160,6 @@ public class LimObject
                 new LimCFunction("init", new LimMethodFunc(LimObject.slotSelf)),
                 new LimCFunction("if", new LimMethodFunc(LimObject.slotIf)),
                 new LimCFunction("yield", new LimMethodFunc(LimObject.slotYield)),
-                new LimCFunction("@@", new LimMethodFunc(LimObject.slotAsyncCall)),
                 new LimCFunction("yieldingCoros", new LimMethodFunc(LimObject.slotYieldingCoros)),
                 new LimCFunction("while", new LimMethodFunc(LimObject.slotWhile))
             };
@@ -442,46 +441,6 @@ public class LimObject
         return condition ? target.getState().LimTrue : target.getState().LimFalse;
     }
 
-    public static LimObject slotAsyncCall(LimObject target, LimObject locals, LimObject message)
-    {
-        LimMessage msg = message as LimMessage;
-        LimMessage aMessage = msg.rawArgAt(0);
-        LimObject context = target;
-        if (msg.args.Count >= 2)
-        {
-            context = msg.localsValueArgAt(locals, 1);
-        }
-
-        LimBlock o = target.rawGetSlot(aMessage.messageName) as LimBlock;
-        if (o != null)
-        {
-            LimMessage mmm = o.containedMessage;
-            mmm.async = true;
-
-
-            IoContext ctx = new IoContext();
-            ctx.target = context;
-            ctx.locals = target;
-            ctx.message = mmm;
-            mmm.async = true;
-            LimState state = target.getState();
-            LimObject future = LimObject.createObject(state);
-            IEnumerator e = LimMessage.asyncCall(ctx, future);
-            state.contextList.Add(e);
-            return future;
-        }
-        else
-        {
-            LimCFunction cf = target.rawGetSlot(aMessage.messageName) as LimCFunction;
-            if (cf != null)
-            {
-                cf.async = true;
-                return cf.activate(target, locals, aMessage, null);
-            }
-        }
-        return aMessage.localsPerformOn(target, locals);
-    }
-
     public static LimObject slotYieldingCoros(LimObject target, LimObject locals, LimObject message)
     {
         return LimNumber.newWithDouble(target.getState(), target.getState().contextList.Count);
@@ -510,100 +469,9 @@ public class LimObject
 
     public delegate void EvaluateArgsEventHandler(LimMessage msg, EvaluateArgsEventArgs e, out LimObject res);
 
-    public static IEnumerator slotAsyncWhile(LimObject target, LimObject locals, LimObject message, LimObject future)
-    {
-        LimMessage m = message as LimMessage;
-        LimObject result = target.getState().LimNil;
-        LimObject cond = null;
-
-        while (true)
-        {
-            cond = m.localsValueArgAt(locals, 0);
-            //evaluateArgs(m, new EvaluateArgsEventArgs(0), out cond);
-
-            if (cond == target.getState().LimFalse || cond == target.getState().LimNil)
-            {
-                break;
-            }
-
-            //result = m.localsValueArgAt(locals, 1);
-            //evaluateArgs(m, new EvaluateArgsEventArgs(1), out result);
-
-            LimMessage msg = 1 < m.args.Count ? m.args[1] as LimMessage : null;
-            if (msg != null)
-            {
-                if (msg.cachedResult != null && msg.next == null)
-                {
-                    result = msg.cachedResult;
-                    yield return result;
-                }
-                //result = localMessage.localsPerformOn(locals, locals);
-
-                result = target;
-                LimObject cachedTarget = target;
-                LimObject savedPrevResultAsYieldResult = null;
-
-                do
-                {
-                    if (msg.messageName.Equals(msg.getState().semicolonSymbol))
-                    {
-                        target = cachedTarget;
-                    }
-                    else
-                    {
-                        result = msg.cachedResult;
-                        if (result == null)
-                        {
-                            if (msg.messageName.value.Equals("yield"))
-                            {
-                                yield return result;
-                            }
-                            else
-                            {
-                                result = target.perform(target, locals, msg);
-                            }
-                        }
-                        if (result == null)
-                        {
-                            target = cachedTarget;
-                            //result = savedPrevResultAsYieldResult;
-                        }
-                        else
-                        {
-                            target = result;
-                        }
-                        savedPrevResultAsYieldResult = result;
-                    }
-                } while ((msg = msg.next) != null);
-                future.slots["future"] = result;
-
-                yield return null;
-            }
-
-            result = m.getState().LimNil;
-
-            if (target.getState().handleStatus() != 0)
-            {
-                goto done;
-            }
-
-        }
-    done:
-        yield return null;
-    }
-
     public static LimObject slotWhile(LimObject target, LimObject locals, LimObject message)
     {
         LimMessage m = message as LimMessage;
-
-        if (m.async)
-        {
-            LimState state = target.getState();
-            LimObject future = LimObject.createObject(state);
-            IEnumerator e = LimObject.slotAsyncWhile(target, locals, message, future);
-            state.contextList.Add(e);
-            return future;
-        }
 
         LimObject result = target.getState().LimNil;
         while (true)

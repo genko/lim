@@ -245,63 +245,8 @@ public class LimMessage : LimObject
         return s;
     }
 
-    public static IEnumerator asyncCall(IoContext ctx, LimObject future)
-    {
-        LimObject target = ctx.target;
-        LimObject locals = ctx.locals;
-        LimObject result = target;
-        LimObject cachedTarget = target;
-        LimMessage msg = ctx.message;
-        LimObject savedPrevResultAsYieldResult = null;
-
-        do
-        {
-            if (msg.messageName.Equals(msg.getState().semicolonSymbol))
-            {
-                target = cachedTarget;
-            }
-            else
-            {
-                result = msg.cachedResult;
-                if (result == null)
-                {
-                    if (msg.messageName.value.Equals("yield"))
-                    {
-                        yield return result;
-                    }
-                    else
-                    {
-                        result = target.perform(target, locals, msg);
-                    }
-                }
-                if (result == null)
-                {
-                    result = savedPrevResultAsYieldResult;
-                }
-                target = result;
-                savedPrevResultAsYieldResult = result;
-            }
-        } while ((msg = msg.next) != null);
-        future.slots["future"] = result;
-        yield return null;
-        //yield return result;
-    }
-
     public LimObject localsPerformOn(LimObject target, LimObject locals)
     {
-        if (async)
-        {
-            IoContext ctx = new IoContext();
-            ctx.target = target;
-            ctx.locals = locals;
-            ctx.message = this;
-            LimState state = target.getState();
-            LimObject future = LimObject.createObject(state);
-            IEnumerator e = LimMessage.asyncCall(ctx, future);
-            state.contextList.Add(e);
-            return future;
-        }
-
         LimObject result = target;
         LimObject cachedTarget = target;
         LimMessage msg = this;
