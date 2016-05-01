@@ -123,7 +123,7 @@ public class LimMessage : LimObject
     {
         LimMessage self = target as LimMessage;
         LimList list = LimList.createObject(target.getState());
-        foreach (LimObject o in self.args)
+        foreach (LimObject o in self.args.getIter())
         {
             list.append(o);
         }
@@ -142,7 +142,7 @@ public class LimMessage : LimObject
     public static LimObject slotArgCount(LimObject target, LimObject locals, LimObject message)
     {
         LimMessage self = target as LimMessage;
-        return LimNumber.newWithDouble(target.getState(), System.Convert.ToDouble(self.args.Count));
+        return LimNumber.newWithDouble(target.getState(), System.Convert.ToDouble(self.args.Count()));
     }
 
     public static LimObject slotArgAt(LimObject target, LimObject locals, LimObject message)
@@ -150,7 +150,7 @@ public class LimMessage : LimObject
         LimMessage self = target as LimMessage;
         LimMessage m = message as LimMessage;
         int index = m.localsNumberArgAt(locals, 0).asInt();
-        LimObject v = self.args[index] as LimObject;
+        LimObject v = self.args.Get(index) as LimObject;
         return v != null ? v : self.getState().LimNil;
     }
 
@@ -204,15 +204,15 @@ public class LimMessage : LimObject
         {
             s += m.messageName;
 
-            if (m.args.Count > 0)
+            if (m.args.Count() > 0)
             {
                 s += "(";
 
-                for (int i = 0; i < m.args.Count; i++)
+                for (int i = 0; i < m.args.Count(); i++)
                 {
-                    LimMessage arg = m.args[i] as LimMessage;
+                    LimMessage arg = m.args.Get(i) as LimMessage;
                     s += arg.descriptionToFollow(true);
-                    if (i != m.args.Count - 1)
+                    if (i != m.args.Count() - 1)
                     {
                         s += ", ";
                     }
@@ -281,13 +281,13 @@ public class LimMessage : LimObject
 
     public LimMessage rawArgAt(int p)
     {
-        LimMessage argIsMessage = args[p] as LimMessage;
+        LimMessage argIsMessage = args.Get(p) as LimMessage;
         return argIsMessage;
     }
 
     public LimObject localsValueArgAt(LimObject locals, int i)
     {
-        LimMessage m = i < args.Count ? args[i] as LimMessage : null;
+        LimMessage m = i < args.Count() ? args.Get(i) as LimMessage : null;
         if (m != null)
         {
             if (m.cachedResult != null && m.next == null)

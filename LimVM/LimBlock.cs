@@ -58,7 +58,7 @@ public class LimBlock : LimObject
         LimState state = target.getState();
         LimBlock self = LimBlock.createObject(state);
         LimMessage m = message as LimMessage;
-        int nargs = m.args.Count;
+        int nargs = m.args.Count();
         LimMessage lastArgAsMessage = (nargs > 0) ? m.rawArgAt(nargs - 1) : state.nilMessage;
         int i;
 
@@ -92,10 +92,10 @@ public class LimBlock : LimObject
             s += "block(";
         else
             s += "method(";
-        int nargs = self.argNames.Count;
+        int nargs = self.argNames.Count();
         for (int i = 0; i < nargs; i++)
         {
-            LimSeq name = self.argNames[i] as LimSeq;
+            LimSeq name = self.argNames.Get(i) as LimSeq;
             s += name.value + ", ";
         }
 
@@ -135,16 +135,16 @@ public class LimBlock : LimObject
         callObject = LimCall.with(state, locals, target, m, slotContext, self, null/*state.currentCoroutine*/);
 
         LimSeqObjectHashtable bslots = blockLocals.slots;
-        bslots["call"] = callObject;
-        bslots["self"] = scope;
-        bslots["updateSlot"] = state.localsUpdateSlotCFunc;
+        bslots.Set("call",callObject);
+        bslots.Set("self", scope);
+        bslots.Set("updateSlot", state.localsUpdateSlotCFunc);
 
         if (argNames != null)
-            for (int i = 0; i < argNames.Count; i++)
+            for (int i = 0; i < argNames.Count(); i++)
             {
-                LimSeq name = argNames[i] as LimSeq;
+                LimSeq name = argNames.Get(i) as LimSeq;
                 LimObject arg = m.localsValueArgAt(locals, i);
-                blockLocals.slots[name] = arg;
+                blockLocals.slots.Set(name,arg);
             }
 
         if (self.containedMessage != null)

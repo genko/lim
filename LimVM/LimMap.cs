@@ -3,7 +3,7 @@ using System.Collections;
 public class LimMap : LimObject
 {
     public override string getName() { return "Map"; }
-    public Hashtable map = new Hashtable();
+    public System.Collections.Generic.Dictionary<object, object> map = new System.Collections.Generic.Dictionary<object, object>();
 
     public new static LimMap createProto(LimState state)
     {
@@ -17,7 +17,7 @@ public class LimMap : LimObject
         pro.setState(state);
         pro.createSlots();
         pro.createProtos();
-        pro.map = new Hashtable();
+        pro.map = new System.Collections.Generic.Dictionary<object, object>();
         state.registerProtoWithFunc(pro.getName(), new LimStateProto(pro.getName(), pro, new LimStateProtoFunc(pro.proto)));
         pro.protos.Add(state.protoWithInitFunc("Object"));
 
@@ -38,7 +38,7 @@ public class LimMap : LimObject
 
     public override void cloneSpecific(LimObject from, LimObject to)
     {
-        (to as LimMap).map = (from as LimMap).map.Clone() as Hashtable;
+        (to as LimMap).map = new System.Collections.Generic.Dictionary<object, object>((from as LimMap).map);
     }
 
     public static LimObject slotEmpty(LimObject target, LimObject locals, LimObject m)
@@ -76,7 +76,7 @@ public class LimMap : LimObject
         LimObject symbol = m.localsValueArgAt(locals, 0);
         LimMap dict = target as LimMap;
         result = dict.lookupMap(symbol) as LimObject;
-        if (result == null && m.args.Count > 1)
+        if (result == null && m.args.Count() > 1)
         {
             result = m.localsValueArgAt(locals, 1);
         }

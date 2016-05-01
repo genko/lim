@@ -150,24 +150,24 @@ public class LimState
         LimList listProto = LimList.createProto(this);
 
         LimObject protos = objectProto.clone(this);
-        protos.slots["Core"] = core;
-        protos.slots["Addons"] = null;
+        protos.slots.Set("Core",core);
+        protos.slots.Set("Addons",null);
 
-        lobby.slots["Lobby"] = lobby;
-        lobby.slots["Protos"] = protos;
+        lobby.slots.Set("Lobby",lobby);
+        lobby.slots.Set("Protos",protos);
 
-        core.slots["Object"] = objectProto;
-        core.slots["Map"] = mapProto;
-        core.slots["Message"] = messageProto;
-        core.slots["CFunction"] = cfProto;
-        core.slots["Number"] = numProto;
-        core.slots["Console"] = consProto;
-        core.slots["System"] = sysProto;
-        core.slots["Block"] = blockProto;
-        core.slots["Call"] = callProto;
-        core.slots["Locals"] = localsProto = objectProto.localsProto(this);
-        core.slots["List"] = listProto;
-        core.slots["Sequence"] = seqProto;
+        core.slots.Set("Object",objectProto);
+        core.slots.Set("Map", mapProto);
+        core.slots.Set("Message",messageProto);
+        core.slots.Set("CFunction",cfProto);
+        core.slots.Set("Number",numProto);
+        core.slots.Set("Console",consProto);
+        core.slots.Set("System",sysProto);
+        core.slots.Set("Block",blockProto);
+        core.slots.Set("Call",callProto);
+        core.slots.Set("Locals",localsProto = objectProto.localsProto(this));
+        core.slots.Set("List",listProto);
+        core.slots.Set("Sequence",seqProto);
 
         objectProto.protos.Add(lobby);
         lobby.protos.Add(protos);
@@ -235,16 +235,16 @@ public class LimState
     public void setupSingletons()
     {
         LimNil = objectProto.clone(this);
-        LimNil.slots["type"] = IOSYMBOL("nil");
-        core.slots["nil"] = LimNil;
+        LimNil.slots.Set("type",IOSYMBOL("nil"));
+        core.slots.Set("nil",LimNil);
 
         LimTrue = LimObject.createObject(this);
-        LimTrue.slots["type"] = IOSYMBOL("true");
-        core.slots["true"] = LimTrue;
+        LimTrue.slots.Set("type", IOSYMBOL("true"));
+        core.slots.Set("true",LimTrue);
 
         LimFalse = LimObject.createObject(this);
-        LimFalse.slots["type"] = IOSYMBOL("false");
-        core.slots["false"] = LimFalse;
+        LimFalse.slots.Set("type",IOSYMBOL("false"));
+        core.slots.Set("false",LimFalse);
     }
 
     public void error(LimMessage self, string p, string p_3)

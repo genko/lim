@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayList.cs" />
     <Compile Include="LimBlock.cs" />
     <Compile Include="LimBootstrap.cs" />
     <Compile Include="LimCall.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="LimToken.cs" />
     <Compile Include="LimCLI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stack.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

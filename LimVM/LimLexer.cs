@@ -1,5 +1,3 @@
-using System.Collections;
-
 public class LimLexer
 {
 
@@ -19,7 +17,7 @@ public class LimLexer
 
     public void print()
     {
-        LimToken first = tokenStream[0] as LimToken;
+        LimToken first = tokenStream.Get(0) as LimToken;
         if (first != null)
         {
             first.print();
@@ -30,11 +28,11 @@ public class LimLexer
     public void printTokens()
     {
         int i;
-        for (i = 0; i < tokenStream.Count; i++)
+        for (i = 0; i < tokenStream.Count(); i++)
         {
-            LimToken t = tokenStream[i] as LimToken;
+            LimToken t = tokenStream.Get(i) as LimToken;
             System.Console.Write("'{0}' {1}", t.name, t.typeName());
-            if (i < tokenStream.Count - 1)
+            if (i < tokenStream.Count() - 1)
             {
                 System.Console.Write(", ");
             }
@@ -53,7 +51,7 @@ public class LimLexer
 
             if (errorToken == null)
             {
-                if (tokenStream.Count != 0)
+                if (tokenStream.Count() != 0)
                 {
                     errorToken = currentToken();
                 }
@@ -71,8 +69,8 @@ public class LimLexer
 
     public LimToken top()
     {
-        if (resultIndex >= tokenStream.Count) return null;
-        return tokenStream[resultIndex] as LimToken;
+        if (resultIndex >= tokenStream.Count()) return null;
+        return tokenStream.Get(resultIndex) as LimToken;
     }
 
     public int lastPos()
@@ -82,7 +80,7 @@ public class LimLexer
 
     public void pushPos()
     {
-        tokenStack.Push(tokenStream.Count - 1);
+        tokenStack.Push(tokenStream.Count() - 1);
         posStack.Push(currentPos);
     }
 
@@ -214,8 +212,8 @@ public class LimLexer
 
     public LimToken currentToken()
     {
-        if (tokenStream.Count == 0) return null;
-        return tokenStream[tokenStream.Count - 1] as LimToken;
+        if (tokenStream.Count() == 0) return null;
+        return tokenStream.Get(tokenStream.Count() - 1) as LimToken;
     }
 
     // message chain
@@ -469,22 +467,12 @@ public class LimLexer
     {
         return System.Convert.ToInt32(readCharInRange('A', 'Z') != 0 || readCharInRange('a', 'z') != 0
             || readNonASCIIChar() != 0);
-        /*
-        if (!onNULL())
-        {
-            char c = nextChar();
-            return 1;
-        }
-         */
-        //return 0;
     }
 
     // comments
 
     public int readComment()
     {
-        ///return 0;
-        //return (readSlashStarComment() || readSlashSlashComment() || readPoundComment());
         return readSlashSlashComment();
     }
 
@@ -747,20 +735,23 @@ public class LimLexer
         {
             if (readDecimalPlaces() == -1)
             {
-                goto error;
+                popPosBack();
+                return 0;
             }
         }
         else
         {
             if (readDecimalPlaces() != 1)
             {
-                goto error;
+                popPosBack();
+                return 0;
             }
         }
 
         if (readExponent() == -1)
         {
-            goto error;
+            popPosBack();
+            return 0;
         }
 
         if (grabLength() != 0)
@@ -769,7 +760,6 @@ public class LimLexer
             popPos();
             return 1;
         }
-    error:
         popPosBack();
         return 0;
     }
