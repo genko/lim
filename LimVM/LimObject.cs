@@ -16,7 +16,7 @@ public class LimObjectArrayList : ArrayList
 
 // SYMBOL HANDLING HELPER
 
-public class LimSeqObjectHashtable : System.Collections.Generic.Dictionary<object,object>
+public class LimSeqObjectHashtable : System.Collections.Hashtable
 {
     public LimState state = null;
     public LimSeqObjectHashtable(LimState s) { state = s; }
