@@ -61,7 +61,6 @@
   <ItemGroup>
     <Compile Include="ArrayList.cs" />
     <Compile Include="LimBlock.cs" />
-    <Compile Include="LimBootstrap.cs" />
     <Compile Include="LimCall.cs" />
     <Compile Include="LimCFunction.cs" />
     <Compile Include="LimSystem.cs" />

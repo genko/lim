@@ -8,13 +8,13 @@ public class LimMessage : LimObject
     public int lineNumber;
     public LimSeq label;
 
-    public new static LimMessage createProto(LimState state)
+    public static LimMessage createProto(LimState state)
     {
         LimMessage m = new LimMessage();
         return m.proto(state) as LimMessage;
     }
 
-    public new static LimMessage createObject(LimState state)
+    public static LimMessage createObject(LimState state)
     {
         LimMessage pro = new LimMessage();
         return pro.clone(state) as LimMessage;
@@ -24,8 +24,6 @@ public class LimMessage : LimObject
     {
         LimMessage pro = new LimMessage();
         pro.setState(state);
-        //pro.tag.cloneFunc = new IoTagCloneFunc(this.clone);
-        //pro.tag.activateFunc = new IoTagActivateFunc(this.activate);
         pro.createSlots();
         pro.createProtos();
         pro.uniqueId = 0;

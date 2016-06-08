@@ -6,13 +6,13 @@ public class LimSeq : LimObject
     public char[] getAsCharArray()
     { return value.ToCharArray(); }
 
-    public new static LimSeq createProto(LimState state)
+    public static LimSeq createProto(LimState state)
     {
         LimSeq s = new LimSeq();
         return s.proto(state) as LimSeq;
     }
 
-    public new static LimSeq createObject(LimState state)
+    public static LimSeq createObject(LimState state)
     {
         LimSeq s = new LimSeq();
         return s.clone(state) as LimSeq;

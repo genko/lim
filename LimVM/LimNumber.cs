@@ -17,7 +17,7 @@ public class LimNumber : LimObject
     public bool isInteger = true;
     public int longValue;
 
-    public new static LimNumber createProto(LimState state)
+    public static LimNumber createProto(LimState state)
     {
         LimNumber number = new LimNumber();
         return number.proto(state) as LimNumber;
@@ -155,7 +155,7 @@ public class LimNumber : LimObject
                 );
     }
 
-    public new static LimObject slotSubstract(LimObject target, LimObject locals, LimObject message)
+    public static LimObject slotSubstract(LimObject target, LimObject locals, LimObject message)
     {
         LimNumber other = (message as LimMessage).localsNumberArgAt(locals, 0);
         LimNumber self = target as LimNumber;

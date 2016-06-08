@@ -3,13 +3,13 @@ public class LimList : LimObject
     public override string getName() { return "List"; }
     public LimObjectArrayList list = new LimObjectArrayList();
 
-    public new static LimList createProto(LimState state)
+    public static LimList createProto(LimState state)
     {
         LimList m = new LimList();
         return m.proto(state) as LimList;
     }
 
-    public new static LimList createObject(LimState state)
+    public static LimList createObject(LimState state)
     {
         LimList m = new LimList();
         return m.clone(state) as LimList;

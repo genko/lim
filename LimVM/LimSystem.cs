@@ -3,7 +3,7 @@ public class LimSystem : LimObject
     public override string getName() { return "System"; }
 
 
-    public new static LimSystem createProto(LimState state)
+    public static LimSystem createProto(LimState state)
     {
         LimSystem console = new LimSystem();
         return console.proto(state) as LimSystem;

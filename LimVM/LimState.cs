@@ -268,15 +268,6 @@ public class LimState
         return result;
     }
 
-    public LimObject processBootstrap()
-    {
-        LimObject result = null;
-        result = onDoCStringWithLabel(lobby, LimBootstrap.bootstrap, "bootstrap");
-        System.Console.WriteLine("Bootstrap successfully loaded.");
-        return result;
-    }
-
-
     /// <summary>
     /// Command line prompt, interpreted stuff is added to specified state
     /// </summary>
@@ -284,7 +275,6 @@ public class LimState
     public void prompt(LimState state)
     {
         LimObject result = null;
-        processBootstrap();
         //onDoCStringWithLabel(lobby, "\"Geben Sie einen Namen ein: \" print\n\rblub := Console readLine", "propmt");
         //onDoCStringWithLabel(lobby, "\"Hallo, \" print\n\rblub print\n\r\"!\" println", "prompt:");
         //return;

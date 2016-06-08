@@ -18,13 +18,13 @@ public class LimCall : LimObject
     public LimObject coroutine;
     public LimCallStatus stopStatus;
 
-    public new static LimCall createProto(LimState state)
+    public static LimCall createProto(LimState state)
     {
         LimCall call = new LimCall();
         return call.proto(state) as LimCall;
     }
 
-    public new static LimCall createObject(LimState state)
+    public static LimCall createObject(LimState state)
     {
         LimCall call = new LimCall();
         return call.clone(state) as LimCall;

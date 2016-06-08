@@ -8,13 +8,13 @@ public class LimBlock : LimObject
 
     // Prototypes and Clone
 
-    public new static LimBlock createProto(LimState state)
+    public static LimBlock createProto(LimState state)
     {
         LimBlock number = new LimBlock();
         return number.proto(state) as LimBlock;
     }
 
-    public new static LimBlock createObject(LimState state)
+    public static LimBlock createObject(LimState state)
     {
         LimBlock number = new LimBlock();
         return number.clone(state) as LimBlock;
@@ -53,7 +53,7 @@ public class LimBlock : LimObject
 
     // Published Slots
 
-    public new static LimObject slotMethod(LimObject target, LimObject locals, LimObject message)
+    public static LimObject slotMethod(LimObject target, LimObject locals, LimObject message)
     {
         LimState state = target.getState();
         LimBlock self = LimBlock.createObject(state);
@@ -75,7 +75,7 @@ public class LimBlock : LimObject
         return self;
     }
 
-    public new static LimObject slotBlock(LimObject target, LimObject locals, LimObject m)
+    public static LimObject slotBlock(LimObject target, LimObject locals, LimObject m)
     {
         LimBlock self = target as LimBlock;
         self = LimBlock.slotMethod(target, locals, m) as LimBlock;

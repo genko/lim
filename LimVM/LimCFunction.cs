@@ -7,13 +7,13 @@ public class LimCFunction : LimObject
     public string funcName;
     public LimCFunction() : base() { isActivatable = true; }
 
-    public new static LimCFunction createProto(LimState state)
+    public static LimCFunction createProto(LimState state)
     {
         LimCFunction cf = new LimCFunction();
         return cf.proto(state) as LimCFunction;
     }
 
-    public new static LimCFunction createObject(LimState state)
+    public static LimCFunction createObject(LimState state)
     {
         LimCFunction cf = new LimCFunction();
         return cf.proto(state).clone(state) as LimCFunction;

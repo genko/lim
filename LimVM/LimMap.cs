@@ -5,7 +5,7 @@ public class LimMap : LimObject
     public override string getName() { return "Map"; }
     public System.Collections.Generic.Dictionary<object, object> map = new System.Collections.Generic.Dictionary<object, object>();
 
-    public new static LimMap createProto(LimState state)
+    public static LimMap createProto(LimState state)
     {
         LimMap m = new LimMap();
         return m.proto(state) as LimMap;
