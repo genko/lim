@@ -1,9 +1,13 @@
+﻿using System.Collections;
+using System;
+using System.Globalization;
+using System.IO;
+
 public class LimSystem : LimObject
 {
     public override string getName() { return "System"; }
 
-
-    public static LimSystem createProto(LimState state)
+    public new static LimSystem createProto(LimState state)
     {
         LimSystem console = new LimSystem();
         return console.proto(state) as LimSystem;
@@ -28,12 +32,12 @@ public class LimSystem : LimObject
 
     public override int GetHashCode()
     {
-        return System.Convert.ToInt32(uniqueIdCounter);
+        return Convert.ToInt32(uniqueIdCounter);
     }
 
     public override void print()
     {
-        System.Console.Write("{0}", this.ToString());
+        Console.Write("{0}", this.ToString());
     }
 
     public static LimList args(LimObject target, LimObject locals, LimObject message)

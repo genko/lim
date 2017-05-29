@@ -7,9 +7,9 @@
         list.Add(obj);
     }
 
-    public int Count()
+    public int Count
     {
-        return list.Count;
+        get { return list.Count; }
     }
 
     public object Get(int index)
@@ -35,6 +35,11 @@
     public void RemoveAt(int index)
     {
         list.RemoveAt(index);
+    }
+
+    public void Remove(object item)
+    {
+        list.Remove(item);
     }
 
     public System.Collections.Generic.List<object>  getIter()

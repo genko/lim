@@ -140,7 +140,7 @@ public class LimMessage : LimObject
     public static LimObject slotArgCount(LimObject target, LimObject locals, LimObject message)
     {
         LimMessage self = target as LimMessage;
-        return LimNumber.newWithDouble(target.getState(), System.Convert.ToDouble(self.args.Count()));
+        return LimNumber.newWithDouble(target.getState(), System.Convert.ToDouble(self.args.Count));
     }
 
     public static LimObject slotArgAt(LimObject target, LimObject locals, LimObject message)
@@ -202,15 +202,15 @@ public class LimMessage : LimObject
         {
             s += m.messageName;
 
-            if (m.args.Count() > 0)
+            if (m.args.Count > 0)
             {
                 s += "(";
 
-                for (int i = 0; i < m.args.Count(); i++)
+                for (int i = 0; i < m.args.Count; i++)
                 {
                     LimMessage arg = m.args.Get(i) as LimMessage;
                     s += arg.descriptionToFollow(true);
-                    if (i != m.args.Count() - 1)
+                    if (i != m.args.Count - 1)
                     {
                         s += ", ";
                     }
@@ -285,7 +285,7 @@ public class LimMessage : LimObject
 
     public LimObject localsValueArgAt(LimObject locals, int i)
     {
-        LimMessage m = i < args.Count() ? args.Get(i) as LimMessage : null;
+        LimMessage m = i < args.Count ? args.Get(i) as LimMessage : null;
         if (m != null)
         {
             if (m.cachedResult != null && m.next == null)

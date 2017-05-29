@@ -96,7 +96,7 @@ public class LimList : LimObject
     public static LimObject slotSize(LimObject target, LimObject locals, LimObject m)
     {
         LimList o = target as LimList;
-        return LimNumber.newWithDouble(target.getState(), o.list.Count());
+        return LimNumber.newWithDouble(target.getState(), o.list.Count);
     }
 
     public void append(LimObject o)
@@ -109,7 +109,7 @@ public class LimList : LimObject
         LimMessage m = message as LimMessage;
         LimList o = target as LimList;
 
-        for (int i = 0; i < m.args.Count(); i++)
+        for (int i = 0; i < m.args.Count; i++)
         {
             LimObject obj = m.localsValueArgAt(locals, i);
             o.list.Add(obj);
@@ -122,10 +122,10 @@ public class LimList : LimObject
         LimMessage m = message as LimMessage;
         LimList o = target as LimList;
 
-        for (int i = 0; i < m.args.Count(); i++)
+        for (int i = 0; i < m.args.Count; i++)
         {
             LimList obj = m.localsValueArgAt(locals, i) as LimList;
-            for (int j = 0; j < obj.list.Count(); j++)
+            for (int j = 0; j < obj.list.Count; j++)
             {
                 LimObject v = obj.list.Get(j) as LimObject;
                 o.list.Add(v);
@@ -139,7 +139,7 @@ public class LimList : LimObject
         LimMessage m = message as LimMessage;
         LimList o = LimList.createObject(target.getState()) as LimList;
 
-        for (int i = 0; i < m.args.Count(); i++)
+        for (int i = 0; i < m.args.Count; i++)
         {
             LimObject obj = m.localsValueArgAt(locals, i);
             o.list.Add(obj);
@@ -165,9 +165,9 @@ public class LimList : LimObject
     {
         LimMessage m = message as LimMessage;
         LimList o = target as LimList;
-        if (o.list.Count() > 0)
+        if (o.list.Count > 0)
         {
-            LimObject e = o.list.Get(o.list.Count() - 1) as LimObject;
+            LimObject e = o.list.Get(o.list.Count - 1) as LimObject;
             return e;
         }
         return target.getState().LimNil;
@@ -177,10 +177,10 @@ public class LimList : LimObject
     {
         LimMessage m = message as LimMessage;
         LimList o = target as LimList;
-        if (o.list.Count() > 0)
+        if (o.list.Count > 0)
         {
-            LimObject e = o.list.Get(o.list.Count() - 1) as LimObject;
-            o.list.RemoveAt(o.list.Count() - 1);
+            LimObject e = o.list.Get(o.list.Count - 1) as LimObject;
+            o.list.RemoveAt(o.list.Count - 1);
             return e;
         }
         else

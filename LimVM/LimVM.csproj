@@ -61,9 +61,10 @@
   <ItemGroup>
     <Compile Include="ArrayList.cs" />
     <Compile Include="LimBlock.cs" />
+    <Compile Include="LimBootstrap.cs" />
     <Compile Include="LimCall.cs" />
     <Compile Include="LimCFunction.cs" />
-    <Compile Include="LimSystem.cs" />
+    <Compile Include="LimConsole.cs" />
     <Compile Include="LimLexer.cs" />
     <Compile Include="LimList.cs">
       <SubType>Code</SubType>
@@ -72,11 +73,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LimMessage.cs" />
-    <Compile Include="LimConsole.cs" />
     <Compile Include="LimNumber.cs" />
     <Compile Include="LimObject.cs" />
     <Compile Include="LimSeq.cs" />
     <Compile Include="LimState.cs" />
+    <Compile Include="LimSysterm.cs" />
     <Compile Include="LimToken.cs" />
     <Compile Include="LimCLI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

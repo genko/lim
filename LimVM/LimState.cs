@@ -9,16 +9,14 @@ public class IoContext
 public class LimState
 {
 
-    public System.Collections.ArrayList contextList = new System.Collections.ArrayList();
+    public ArrayList contextList = new ArrayList();
 
     public System.Collections.Hashtable primitives = new System.Collections.Hashtable(); // keys are raw strings
     public System.Collections.Hashtable symbols = new System.Collections.Hashtable(); // keys are raw strings
 
     // coroutines
     public LimObject objectProto;
-    // public IoCoroutine mainCoroutine;    // the object that represents the main "thread"
-    // public IoCoroutine currentCoroutine; // the object whose coroutine is active
-    public System.Collections.Stack currentIoStack;      // quick access to current coro's retain stack
+    public Stack currentIoStack;      // quick access to current coro's retain stack
 
     // quick access objects
     public LimSeq activateSymbol;
@@ -142,12 +140,12 @@ public class LimState
 
         LimMap mapProto = LimMap.createProto(this);
         LimNumber numProto = LimNumber.createProto(this);
-        LimConsole consProto = LimConsole.createProto(this);
-        LimSystem sysProto = LimSystem.createProto(this);
         LimCFunction cfProto = LimCFunction.createProto(this);
         LimBlock blockProto = LimBlock.createProto(this);
         LimCall callProto = LimCall.createProto(this);
         LimList listProto = LimList.createProto(this);
+        LimConsole consProto = LimConsole.createProto(this);
+        LimSystem sysProto = LimSystem.createProto(this);
 
         LimObject protos = objectProto.clone(this);
         protos.slots.Set("Core",core);
@@ -161,13 +159,13 @@ public class LimState
         core.slots.Set("Message",messageProto);
         core.slots.Set("CFunction",cfProto);
         core.slots.Set("Number",numProto);
-        core.slots.Set("Console",consProto);
-        core.slots.Set("System",sysProto);
         core.slots.Set("Block",blockProto);
         core.slots.Set("Call",callProto);
         core.slots.Set("Locals",localsProto = objectProto.localsProto(this));
         core.slots.Set("List",listProto);
         core.slots.Set("Sequence",seqProto);
+        core.slots.Set("Console",consProto);
+        core.slots.Set("System",sysProto);
 
         objectProto.protos.Add(lobby);
         lobby.protos.Add(protos);
@@ -275,8 +273,12 @@ public class LimState
     public void prompt(LimState state)
     {
         LimObject result = null;
-        //onDoCStringWithLabel(lobby, "\"Geben Sie einen Namen ein: \" print\n\rblub := Console readLine", "propmt");
+
+        onDoCStringWithLabel(lobby, LimBootstrap.bootstrap, "bootstrap");
+
+        //onDoCStringWithLabel(lobby, "4+(4) println()", "prompt");
         //onDoCStringWithLabel(lobby, "\"Hallo, \" print\n\rblub print\n\r\"!\" println", "prompt:");
+        //System.Console.ReadLine();
         //return;
         while (true)
         {

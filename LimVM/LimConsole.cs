@@ -1,9 +1,13 @@
+﻿using System.Collections;
+using System;
+using System.Globalization;
+using System.IO;
+
 public class LimConsole : LimObject
 {
     public override string getName() { return "Console"; }
 
-
-    public static LimConsole createProto(LimState state)
+    public new static LimConsole createProto(LimState state)
     {
         LimConsole console = new LimConsole();
         return console.proto(state) as LimConsole;
@@ -29,24 +33,24 @@ public class LimConsole : LimObject
 
     public override int GetHashCode()
     {
-        return System.Convert.ToInt32(uniqueIdCounter);
+        return Convert.ToInt32(uniqueIdCounter);
     }
 
     public override void print()
     {
-        System.Console.Write("{0}", this.ToString());
+        Console.Write("{0}", this.ToString());
     }
 
     public static LimSeq readLine(LimObject target, LimObject locals, LimObject message)
     {
         LimConsole o = target as LimConsole;
-        return LimSeq.createObject(o.getState(), System.Console.ReadLine());
+        return LimSeq.createObject(o.getState(), Console.ReadLine());
     }
 
     public static LimSeq readKey(LimObject target, LimObject locals, LimObject message)
     {
         LimConsole o = target as LimConsole;
-        return LimSeq.createObject(o.getState(), System.Console.ReadKey().KeyChar.ToString());
+        return LimSeq.createObject(o.getState(), Console.ReadKey().KeyChar.ToString());
     }
 
 }

@@ -3,10 +3,10 @@ public class LimObjectArrayList : ArrayList
     public override string ToString()
     {
         string s = " (";
-        for (int i = 0; i < Count(); i++)
+        for (int i = 0; i < Count; i++)
         {
             s += base.Get(i).ToString();
-            if (i != Count() - 1)
+            if (i != Count - 1)
                 s += ",";
         }
         s += ")";
@@ -274,7 +274,7 @@ public class LimObject
         LimMessage msg = m as LimMessage;
         LimMessage aMessage = msg.localsMessageArgAt(locals, 0) as LimMessage;
         LimObject context = self;
-        if (msg.args.Count() >= 2)
+        if (msg.args.Count >= 2)
         {
             context = msg.localsValueArgAt(locals, 1);
         }
@@ -325,7 +325,7 @@ public class LimObject
     public static LimObject slotDo(LimObject target, LimObject locals, LimObject message)
     {
         LimMessage m = message as LimMessage;
-        if (m.args.Count() != 0)
+        if (m.args.Count != 0)
         {
             LimMessage argMessage = m.rawArgAt(0);
             argMessage.localsPerformOn(target, target);
@@ -409,7 +409,7 @@ public class LimObject
     public static LimObject slotMessage(LimObject target, LimObject locals, LimObject message)
     {
         LimMessage m = message as LimMessage;
-        return m.args.Count() > 0 ? m.rawArgAt(0) : target.getState().LimNil;
+        return m.args.Count > 0 ? m.rawArgAt(0) : target.getState().LimNil;
     }
 
     public static LimObject slotMethod(LimObject target, LimObject locals, LimObject message)
@@ -436,7 +436,7 @@ public class LimObject
         LimObject r = m.localsValueArgAt(locals, 0);
         bool condition = r != target.getState().LimNil && r != target.getState().LimFalse;
         int index = condition ? 1 : 2;
-        if (index < m.args.Count())
+        if (index < m.args.Count)
             return m.localsValueArgAt(locals, index);
         return condition ? target.getState().LimTrue : target.getState().LimFalse;
     }
@@ -452,7 +452,7 @@ public class LimObject
         ArrayList toDeleteThread = new ArrayList();
         for (int i = 0; i < state.contextList.Count; i++)
         {
-            System.Collections.IEnumerator e = state.contextList[i] as System.Collections.IEnumerator;
+            System.Collections.IEnumerator e = state.contextList.Get(i) as System.Collections.IEnumerator;
             bool end = e.MoveNext();
             if (!end) toDeleteThread.Add(e);
         }

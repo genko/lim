@@ -76,7 +76,7 @@ public class LimMap : LimObject
         LimObject symbol = m.localsValueArgAt(locals, 0);
         LimMap dict = target as LimMap;
         result = dict.lookupMap(symbol) as LimObject;
-        if (result == null && m.args.Count() > 1)
+        if (result == null && m.args.Count > 1)
         {
             result = m.localsValueArgAt(locals, 1);
         }

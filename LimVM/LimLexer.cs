@@ -28,11 +28,11 @@ public class LimLexer
     public void printTokens()
     {
         int i;
-        for (i = 0; i < tokenStream.Count(); i++)
+        for (i = 0; i < tokenStream.Count; i++)
         {
             LimToken t = tokenStream.Get(i) as LimToken;
             System.Console.Write("'{0}' {1}", t.name, t.typeName());
-            if (i < tokenStream.Count() - 1)
+            if (i < tokenStream.Count - 1)
             {
                 System.Console.Write(", ");
             }
@@ -51,7 +51,7 @@ public class LimLexer
 
             if (errorToken == null)
             {
-                if (tokenStream.Count() != 0)
+                if (tokenStream.Count != 0)
                 {
                     errorToken = currentToken();
                 }
@@ -69,7 +69,7 @@ public class LimLexer
 
     public LimToken top()
     {
-        if (resultIndex >= tokenStream.Count()) return null;
+        if (resultIndex >= tokenStream.Count) return null;
         return tokenStream.Get(resultIndex) as LimToken;
     }
 
@@ -80,7 +80,7 @@ public class LimLexer
 
     public void pushPos()
     {
-        tokenStack.Push(tokenStream.Count() - 1);
+        tokenStack.Push(tokenStream.Count - 1);
         posStack.Push(currentPos);
     }
 
@@ -212,8 +212,8 @@ public class LimLexer
 
     public LimToken currentToken()
     {
-        if (tokenStream.Count() == 0) return null;
-        return tokenStream.Get(tokenStream.Count() - 1) as LimToken;
+        if (tokenStream.Count == 0) return null;
+        return tokenStream.Get(tokenStream.Count - 1) as LimToken;
     }
 
     // message chain
