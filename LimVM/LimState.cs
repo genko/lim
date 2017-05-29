@@ -148,24 +148,24 @@ public class LimState
         LimSystem sysProto = LimSystem.createProto(this);
 
         LimObject protos = objectProto.clone(this);
-        protos.slots.Set("Core",core);
-        protos.slots.Set("Addons",null);
+        protos.slots.Set("Core", core);
+        protos.slots.Set("Addons", null);
 
-        lobby.slots.Set("Lobby",lobby);
-        lobby.slots.Set("Protos",protos);
+        lobby.slots.Set("Lobby", lobby);
+        lobby.slots.Set("Protos", protos);
 
-        core.slots.Set("Object",objectProto);
+        core.slots.Set("Object", objectProto);
         core.slots.Set("Map", mapProto);
-        core.slots.Set("Message",messageProto);
-        core.slots.Set("CFunction",cfProto);
-        core.slots.Set("Number",numProto);
-        core.slots.Set("Block",blockProto);
-        core.slots.Set("Call",callProto);
-        core.slots.Set("Locals",localsProto = objectProto.localsProto(this));
-        core.slots.Set("List",listProto);
-        core.slots.Set("Sequence",seqProto);
-        core.slots.Set("Console",consProto);
-        core.slots.Set("System",sysProto);
+        core.slots.Set("Message", messageProto);
+        core.slots.Set("CFunction", cfProto);
+        core.slots.Set("Number", numProto);
+        core.slots.Set("Block", blockProto);
+        core.slots.Set("Call", callProto);
+        core.slots.Set("Locals", localsProto = objectProto.localsProto(this));
+        core.slots.Set("List", listProto);
+        core.slots.Set("Sequence", seqProto);
+        core.slots.Set("Console", consProto);
+        core.slots.Set("System", sysProto);
 
         objectProto.protos.Add(lobby);
         lobby.protos.Add(protos);
@@ -233,16 +233,16 @@ public class LimState
     public void setupSingletons()
     {
         LimNil = objectProto.clone(this);
-        LimNil.slots.Set("type",IOSYMBOL("nil"));
-        core.slots.Set("nil",LimNil);
+        LimNil.slots.Set("type", IOSYMBOL("nil"));
+        core.slots.Set("nil", LimNil);
 
         LimTrue = LimObject.createObject(this);
         LimTrue.slots.Set("type", IOSYMBOL("true"));
-        core.slots.Set("true",LimTrue);
+        core.slots.Set("true", LimTrue);
 
         LimFalse = LimObject.createObject(this);
-        LimFalse.slots.Set("type",IOSYMBOL("false"));
-        core.slots.Set("false",LimFalse);
+        LimFalse.slots.Set("type", IOSYMBOL("false"));
+        core.slots.Set("false", LimFalse);
     }
 
     public void error(LimMessage self, string p, string p_3)
@@ -276,10 +276,6 @@ public class LimState
 
         onDoCStringWithLabel(lobby, LimBootstrap.bootstrap, "bootstrap");
 
-        //onDoCStringWithLabel(lobby, "4+(4) println()", "prompt");
-        //onDoCStringWithLabel(lobby, "\"Hallo, \" print\n\rblub print\n\r\"!\" println", "prompt:");
-        //System.Console.ReadLine();
-        //return;
         while (true)
         {
             System.Console.Write("Io> ");
@@ -294,7 +290,6 @@ public class LimState
 
         }
     }
-
 }
 
 public enum IoStopStatus

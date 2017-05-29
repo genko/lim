@@ -14,7 +14,14 @@
 
     public object Get(int index)
     {
-        return list[index];
+        try
+        {
+            return list[index];
+        }
+        catch (System.Exception)
+        {
+            return null;
+        }
     }
 
     public int IndexOf(object obj)

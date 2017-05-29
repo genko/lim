@@ -77,7 +77,7 @@
     <Compile Include="LimObject.cs" />
     <Compile Include="LimSeq.cs" />
     <Compile Include="LimState.cs" />
-    <Compile Include="LimSysterm.cs" />
+    <Compile Include="LimSystem.cs" />
     <Compile Include="LimToken.cs" />
     <Compile Include="LimCLI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -57,6 +57,7 @@ public class LimSeq : LimObject
                 new LimCFunction("at", new LimMethodFunc(LimSeq.slotAt)),
                 new LimCFunction("reverse", new LimMethodFunc(LimSeq.slotReverse)),
                 new LimCFunction("size", new LimMethodFunc(LimSeq.size)),
+                new LimCFunction("asNumber", new LimMethodFunc(LimSeq.asNumber)),
             };
 
         pro.addTaglessMethodTable(state, methodTable);
@@ -100,6 +101,12 @@ public class LimSeq : LimObject
         return LimNumber.newWithDouble(target.getState(), o.value.Length);
     }
 
+    public static LimObject asNumber(LimObject target, LimObject locals, LimObject message)
+    {
+        LimMessage m = message as LimMessage;
+        LimSeq o = target as LimSeq;
+        return LimNumber.newWithDouble(target.getState(), double.Parse(o.value));
+    }
 
     public override LimObject clone(LimState state)
     {

@@ -23,7 +23,8 @@ public class LimSystem : LimObject
         pro.protos.Add(state.protoWithInitFunc("Object"));
 
         LimCFunction[] methodTable = new LimCFunction[] {
-                new LimCFunction("args", new LimMethodFunc(LimSystem.args))
+                new LimCFunction("args", new LimMethodFunc(LimSystem.args)),
+                new LimCFunction("exit", new LimMethodFunc(LimSystem.exit))
             };
 
         pro.addTaglessMethodTable(state, methodTable);
@@ -44,10 +45,19 @@ public class LimSystem : LimObject
     {
         LimSystem o = target as LimSystem;
         LimList l = LimList.createObject(o.getState());
+
+        l.append(LimSeq.createObject(o.getState(), System.AppDomain.CurrentDomain.FriendlyName));
+
         for (int i = 0; i < LimState.args.Length; i++)
         {
             l.append(LimSeq.createObject(o.getState(), LimState.args[i]));
         }
         return l;
+    }
+
+    public static LimObject exit(LimObject target, LimObject locals, LimObject message)
+    {
+        System.Environment.Exit(0);
+        return LimObject.createObject(target.getState());
     }
 }
